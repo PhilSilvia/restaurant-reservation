@@ -1,6 +1,6 @@
 import React from "react";
 import Menu from "./Menu";
-import Routes from "./Routes";
+import RootRoutes from "./RootRoutes";
 
 import "./Layout.css";
 
@@ -19,7 +19,7 @@ function Layout() {
           <Menu />
         </div>
         <div className="col">
-          <Routes />
+          <RootRoutes />
         </div>
       </div>
     </div>
