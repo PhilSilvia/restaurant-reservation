@@ -55,7 +55,7 @@ function ReservationForm(){
         // If we have no errors, we proceed with the submission
         if (!submissionError){
             // Submit the reservation data to the back-end
-            navigate(`/dashboard/${formData["reservationDate"]}`);
+            navigate(`/dashboard/?date=${formData["reservationDate"]}`);
         }
     };
 
