@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
-import { useSearchParams } from "react-router-dom";
-import { today } from "../utils/date-time";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { today, previous, next } from "../utils/date-time";
 
 /**
  * Defines the dashboard page.
@@ -12,9 +12,11 @@ import { today } from "../utils/date-time";
 function Dashboard() {
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
+  // Retrieves the query parameters
   const [searchParams] = useSearchParams();
+  // Sets the date to the value from the query parameters, or today if none are defined
   const date = searchParams.get('date') || today();
-  console.log(date);
+  const navigate = useNavigate();
 
   useEffect(loadDashboard, [date]);
 
@@ -27,14 +29,31 @@ function Dashboard() {
     return () => abortController.abort();
   }
 
+  const previousClickHandler = () => {
+    navigate(`/dashboard?date=${previous(date)}`);
+  }
+
+  const nextClickHandler = () => {
+    navigate(`/dashboard?date=${next(date)}`);
+  }
+
+  const todayClickHandler = () => {
+    navigate("/dashboard");
+  }
+
   return (
     <main>
       <h1>Dashboard</h1>
-      <div className="d-md-flex mb-3">
-        <h4 className="mb-0">Reservations for date {date}</h4>
+      <div className="col">
+        <div className="d-md-flex flex-column mb-3">
+          <h4 className="mb-0">Reservations for date {date}</h4>
+          {JSON.stringify(reservations)}
+        </div>
+        <button type="button" onClick={previousClickHandler} className="btn btn-primary" >Previous</button>
+        <button type="button" onClick={nextClickHandler} className="btn btn-primary">Next</button>
+        <button type="button" onClick={todayClickHandler} className="btn btn-success">Today</button>
       </div>
       <ErrorAlert error={reservationsError} />
-      {JSON.stringify(reservations)}
     </main>
   );
 }
