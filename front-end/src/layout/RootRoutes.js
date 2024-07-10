@@ -2,6 +2,7 @@ import React from "react";
 
 import { Navigate, Route, Routes } from "react-router-dom";
 import Dashboard from "../dashboard/Dashboard";
+import DashboardDate from "../dashboard/DashboardDate";
 import NotFound from "./NotFound";
 import { today } from "../utils/date-time";
 import ReservationNew from "../reservations/ReservationNew";
@@ -20,6 +21,7 @@ function RootRoutes() {
       <Route exact={true} path="/reservations" element={<Navigate to={"/dashboard"} />} />
       <Route path="/reservations/new" element={<ReservationNew />} />
       <Route path="/dashboard" element={<Dashboard date={today()} />} />
+      <Route path="/dashboard/:date" element={<DashboardDate />} />
       <Route element={<NotFound />} />
     </Routes>
   );

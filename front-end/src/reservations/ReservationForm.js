@@ -66,7 +66,7 @@ function ReservationForm(){
         navigate('/');
     };
 
-    // Returns the react code for the form and an error display at the bottom
+    // Returns the JSX for the form and an error display at the bottom
     return (
         <div className="col">
             <form onSubmit={handleSubmission}>
