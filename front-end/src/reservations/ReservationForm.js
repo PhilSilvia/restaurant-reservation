@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { createReservation } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 
 /**
@@ -19,11 +20,11 @@ function ReservationForm(){
     const checkForValidData = (data) => {
         // Map for the variable name to a more user-friendly name
         const fieldMap = new Map([
-            ["firstName", "First Name"], 
-            ["lastName", "Last Name"], 
-            ["mobileNumber", "Mobile Phone Number"], 
-            ["reservationDate", "Reservation Data"], 
-            ["reservationTime", "Reservation Time"], 
+            ["first_name", "First Name"], 
+            ["last_name", "Last Name"], 
+            ["mobile_number", "Mobile Phone Number"], 
+            ["reservation_date", "Reservation Data"], 
+            ["reservation_time", "Reservation Time"], 
             ["people", "Party Size"]]);
         // Array of the fields for easy iterating
         const fields = [...fieldMap.keys()];
@@ -55,7 +56,15 @@ function ReservationForm(){
         // If we have no errors, we proceed with the submission
         if (!submissionError){
             // Submit the reservation data to the back-end
-            navigate(`/dashboard/?date=${formData["reservationDate"]}`);
+            const abortController = new AbortController();
+            setSubmissionError(null);
+            createReservation(formData, abortController.signal)
+                .then(() => {
+                    console.log("Attempting to navigate");
+                    return navigate(`/reservations?date=${formData.reservation_date}`)
+                })
+                .catch((error) => setSubmissionError(error));
+            //navigate(`/reservations?date=${formData.reservation_date}`)
         }
     };
 
@@ -71,67 +80,67 @@ function ReservationForm(){
         <div className="col">
             <form onSubmit={handleSubmission}>
                 <div className="form-group">
-                    <label htmlFor="firstName">
+                    <label htmlFor="first_name">
                         First Name 
                         <input 
                             type="text" 
                             className="form-control" 
-                            name="firstName" 
-                            id="firstName" 
+                            name="first_name" 
+                            id="first_name" 
                             onChange={handleChange} 
-                            value={formData.firstName} 
+                            value={formData.first_name} 
                         />
                     </label>
                 </div>
                 <div className="form-group">
-                    <label htmlFor="lastName">
+                    <label htmlFor="last_name">
                         Last Name:
                         <input 
                             type="text" 
                             className="form-control"
-                            name="lastName" 
-                            id="lastName" 
+                            name="last_name" 
+                            id="last_name" 
                             onChange={handleChange} 
-                            value={formData.lastName} 
+                            value={formData.last_name} 
                         />
                     </label>
                 </div>
                 <div className="form-group">
-                    <label htmlFor="mobileNumber">
+                    <label htmlFor="mobile_number">
                         Mobile Phone Number:
                         <input 
                             type="text" 
                             className="form-control"
-                            name="mobileNumber" 
-                            id="mobileNumber" 
+                            name="mobile_number" 
+                            id="mobile_number" 
                             onChange={handleChange} 
-                            value={formData.mobileNumber} 
+                            value={formData.mobile_number} 
                         />
                 </label>
                 </div>
                 <div className="form-group">
-                    <label htmlFor="reservationDate">
+                    <label htmlFor="reservation_date">
                         Date of Reservation:
                         <input 
                             type="date" 
                             className="form-control"
-                            name="reservationDate" 
-                            id="reservationDate" 
+                            name="reservation_date" 
+                            id="reservation_date" 
                             onChange={handleChange} 
-                            value={formData.reservationDate} 
+                            value={formData.reservation_date} 
                         />
                     </label>
                 </div>
                 <div className="form-group">
-                    <label htmlFor="reservationTime">
+                    <label htmlFor="reservation_time">
                         Time of Reservation:
                         <input 
                             type="time" 
                             className="form-control"
-                            name="reservationTime" 
-                            id="reservationTime" 
+                            name="reservation_time" 
+                            id="reservation_time" 
                             onChange={handleChange} 
-                            value={formData.reservationTime} 
+                            value={formData.reservation_time} 
                         />
                     </label>
                 </div>
