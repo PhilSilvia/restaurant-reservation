@@ -1,9 +1,24 @@
 const knex = require("../db/connection");
 
-function list(){
+async function list(){
     return knex("reservations").select("*");
+}
+
+async function read(date){
+    return knex("reservations")
+        .select("*")
+        .where({"reservation_date": date});
+}
+
+async function create(reservation){
+    return knex("reservations")
+        .insert(reservation)
+        .returning("*")
+        .then((createdRecords) => createdRecords[0]);
 }
 
 module.exports = {
     list,
+    read,
+    create,
 };
