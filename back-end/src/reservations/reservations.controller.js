@@ -15,18 +15,63 @@ async function list(req, res) {
   res.json({ data: data });
 }
 
-function validateReservation(req, res){
- 
+/**
+ * Validation helper function for the reservation validation
+ * @param {string} propertyName 
+ * @returns 
+ */
+function bodyDataHas(propertyName){
+  return function (req, res, next) {
+  const { data = {} } = req.body;
+      if (data[propertyName]) {
+          return next();
+      }
+      next({ status: 400, message: `Must include a ${propertyName}` });
+  };
+}
+
+/**
+ * Validation function for the people parameter in a new or updated reservation
+ */
+function peopleIsValid(req, res, next){
+  const { data: { people } = {} } = req.body;
+
+  if (Number(people) > 0){
+      return next();
+  }
+  next({ 
+      status: 400, 
+      message: `Value of the 'people' property must be greater than 0. Received ${exposure}.`
+  });
 }
 
 /**
  * Create handler for reservation resources
  */
 async function create(req, res){
-
+  const { data: { first_name, last_name, mobile_number, reservation_date, reservation_time, people } = {} } = req.body;
+  const newReservation = {
+    first_name,
+    last_name,
+    mobile_number, 
+    reservation_date,
+    reservation_time,
+    people
+  };
+  const response = await service.create(newReservation);
+  res.status(201).json({ data: response });
 }
 
 module.exports = {
   list: asyncErrorBoundary(list),
-  create: [validateReservation, asyncErrorBoundary(create)],
+  create: [
+    bodyDataHas("first_name"),
+    bodyDataHas("last_name"),
+    bodyDataHas("mobile_number"),
+    bodyDataHas("reservation_date"),
+    bodyDataHas("reservation_time"),
+    bodyDataHas("people"),
+    peopleIsValid, 
+    asyncErrorBoundary(create)
+  ],
 };
