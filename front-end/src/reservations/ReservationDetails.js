@@ -1,6 +1,6 @@
 import React from "react";
 
-function ReservationDetails({ key, first_name, last_name, mobile_number, reservation_date, reservation_time, people }){
+function ReservationDetails({ first_name, last_name, mobile_number, reservation_date, reservation_time, people }){
     return (
         <section className="border p-4 mb-4">
             <div className="card">

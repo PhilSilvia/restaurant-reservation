@@ -15,7 +15,7 @@ import ReservationNew from "../reservations/ReservationNew";
 function RootRoutes() {
   return (
     <Routes>
-      <Route exact={true} path="*" element={<Navigate to={"/dashboard"} />} />
+      <Route exact={true} path="/" element={<Navigate to={"/dashboard"} />} />
       <Route exact={true} path="/reservations" element={<Navigate to={"/dashboard"} />} />
       <Route path="/reservations/new" element={<ReservationNew />} />
       <Route path="/dashboard" element={<Dashboard />} />
@@ -25,3 +25,5 @@ function RootRoutes() {
 }
 
 export default RootRoutes;
+
+//<Route exact={true} path="*" element={<Navigate to={"/dashboard"} />} />

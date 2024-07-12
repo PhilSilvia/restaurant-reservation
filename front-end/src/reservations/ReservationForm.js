@@ -9,7 +9,14 @@ import ErrorAlert from "../layout/ErrorAlert";
  */
 function ReservationForm(){
     // State variables for tracking the ongoing form data
-    const [ formData, setFormData ] = useState({});
+    const [ formData, setFormData ] = useState({
+        first_name: "",
+        last_name: "",
+        mobile_number: "",
+        reservation_date: "",
+        reservation_time: "",
+        people: 0,
+    });
     // Tracks any errors from illegal form submissions
     const [ submissionError, setSubmissionError ] = useState(null);
     const navigate = useNavigate();
@@ -60,11 +67,12 @@ function ReservationForm(){
             setSubmissionError(null);
             createReservation(formData, abortController.signal)
                 .then(() => {
-                    console.log("Attempting to navigate");
-                    return navigate(`/reservations?date=${formData.reservation_date}`)
+                    const path = `/dashboard?date=${formData.reservation_date}`;
+                    return navigate(path);
                 })
-                .catch((error) => setSubmissionError(error));
-            //navigate(`/reservations?date=${formData.reservation_date}`)
+               .catch((error) => {
+                    setSubmissionError(error);
+               });
         }
     };
 

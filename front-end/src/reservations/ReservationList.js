@@ -6,7 +6,6 @@ function ReservationList({ reservations = []}){
         const list = reservations
             .map((reservation) => (
                 <ReservationDetails 
-                    key={reservation.reservation_id}
                     first_name={reservation.first_name}
                     last_name={reservation.last_name}
                     mobile_number={reservation.mobile_number}
