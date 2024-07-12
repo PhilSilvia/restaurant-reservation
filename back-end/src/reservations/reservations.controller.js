@@ -1,5 +1,7 @@
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const service = require("./reservations.service");
+const dateIsValid = require("../utils/dateIsValid");
+const timeIsValid = require("../utils/timeIsValid");
 
 /**
  * List handler for reservation resources
@@ -31,17 +33,54 @@ function bodyDataHas(propertyName){
 }
 
 /**
- * Validation function for the people parameter in a new or updated reservation
+ * Validation helper function for the people parameter in a new or updated reservation.
+ * Ensures that the people parameter is greater than 0. 
  */
 function peopleIsValid(req, res, next){
   const { data: { people } = {} } = req.body;
-
-  if (Number(people) > 0){
+  console.log(typeof(people));
+  if (typeof(people) === "number" && people > 0){
       return next();
   }
   next({ 
       status: 400, 
-      message: `Value of the 'people' property must be greater than 0. Received ${exposure}.`
+      message: `Value of the 'people' property must be a number greater than 0. Received ${people}.`
+  });
+}
+
+/**
+ * Validation helper function for the reservation_date
+ * Ensures it is in a valid YYYY-MM-DD format.
+ */
+function reservationDateIsValid(req, res, next){
+  const { data: { reservation_date } = {} } = req.body;
+
+  if (reservation_date){
+    if (dateIsValid(reservation_date)){
+      return next();
+    }
+  }
+  next({
+    status: 400,
+    message: `reservation_date must be in the YYYY-MM-DD format and be a valid date. Received ${reservation_date}`
+  });
+}
+
+/**
+ * Validation helper function for the reservation_time.
+ * Ensures that the time is valid. 
+ */
+function reservationTimeIsValid(req, res, next){
+  const { data: { reservation_time } = {} } = req.body;
+
+  if (reservation_time){
+    if (timeIsValid(reservation_time)){
+      return next();
+    }
+  }
+  next({
+    status: 400,
+    message: `reservation_time must be in the HH:MM:SS format and be a valid time. Received ${reservation_time}`
   });
 }
 
@@ -72,6 +111,8 @@ module.exports = {
     bodyDataHas("reservation_time"),
     bodyDataHas("people"),
     peopleIsValid, 
+    reservationDateIsValid,
+    reservationTimeIsValid,
     asyncErrorBoundary(create)
   ],
 };

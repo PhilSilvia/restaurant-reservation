@@ -45,7 +45,7 @@ function ReservationForm(){
         }
         // If the party size is 0 or fewer, return an error for that, too
         if (Number(data["people"]) <= 0)
-            return new Error("Party size must be greater than zero");
+            return new Error("Party size must be a number greater than zero")
     }
 
     // Event handler for when the form's values are changed, 
@@ -65,7 +65,9 @@ function ReservationForm(){
             // Submit the reservation data to the back-end
             const abortController = new AbortController();
             setSubmissionError(null);
-            createReservation(formData, abortController.signal)
+            // Ensures the 'people' value is a number
+            const data = {...formData, "people": Number(formData.people)};
+            createReservation(data, abortController.signal)
                 .then(() => {
                     const path = `/dashboard?date=${formData.reservation_date}`;
                     return navigate(path);
