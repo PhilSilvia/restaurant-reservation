@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { listReservations } from "../utils/api";
+import ReservationList from "../reservations/ReservationList";
 import ErrorAlert from "../layout/ErrorAlert";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { today, previous, next } from "../utils/date-time";
@@ -47,7 +48,7 @@ function Dashboard() {
       <div className="col">
         <div className="d-md-flex flex-column mb-3">
           <h4 className="mb-0">Reservations for date {date}</h4>
-          {JSON.stringify(reservations)}
+          <ReservationList reservations={reservations}/>
         </div>
         <button type="button" onClick={previousClickHandler} className="btn btn-primary" >Previous</button>
         <button type="button" onClick={nextClickHandler} className="btn btn-primary">Next</button>
@@ -59,3 +60,5 @@ function Dashboard() {
 }
 
 export default Dashboard;
+
+// {JSON.stringify(reservations)}
