@@ -37,8 +37,6 @@ function dateIsValid(date){
     const monthToday = Number(today.getMonth())+1;
     const dayToday = Number(today.getDate());
 
-    console.log(`Comparing ${year} to ${yearToday}, ${month} to ${monthToday} and ${day} to ${dayToday}`);
-
     // Make sure the date isn't earlier than today
     if (year < yearToday)
       return `reservation_date must be in the future. Received ${date}`;;
@@ -47,9 +45,11 @@ function dateIsValid(date){
     if (year === yearToday && month === monthToday && day < dayToday)
       return `reservation_date must be in the future. Received ${date}`;;
 
+    // Make sure it's not a Tuesday
     if (today.getDay() === 2)
       return `reservation_date cannot be a Tuesday. Received ${date}`;;
 
+    // If the date matches today's date, return that it's today
     if (year === yearToday && month === monthToday && day === dayToday)
       return "today";
 

@@ -54,15 +54,20 @@ function peopleIsValid(req, res, next){
 function reservationDateIsValid(req, res, next){
   const { data: { reservation_date } = {} } = req.body;
 
+  // Default error message if reservation_date is somehow null
   let message = `reservation_date cannot be null`;
 
   if (reservation_date){
+    // Get the error message from the validator
     message = dateIsValid(reservation_date);
+
+    // If the date is today, the message will be today, otherwise it will be null
     if (!message || message === "today"){
       res.locals.isToday = message === "today";
       return next();
     }
   }
+  // Return the error message to the user
   next({
     status: 400,
     message,
@@ -76,14 +81,19 @@ function reservationDateIsValid(req, res, next){
 function reservationTimeIsValid(req, res, next){
   const { data: { reservation_time } = {} } = req.body;
 
+  // Default error message if reservation_time is somehow null
   let message = `reservation_time cannot be null`;
-  
+
   if (reservation_time){
+    // Get the error message from the validator
     message = timeIsValid(reservation_time, res.locals.isToday);
+    
+    // If we have no error message, we proceed
     if (!message){
       return next();
     }
   }
+  // Return the error message to the user
   next({
     status: 400,
     message,
