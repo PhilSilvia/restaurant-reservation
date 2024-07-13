@@ -50,7 +50,7 @@ function dateIsValid(date){
     
     // Make sure it's not a Tuesday
     if (checkForTuesday(date))
-      return `reservation_date cannot be a Tuesday. Received ${date}`;;
+      return `reservation_date cannot be on a day the restaurant is closed. Received ${date}`;;
 
     // If the date matches today's date, return that it's today
     if (year === yearToday && month === monthToday && day === dayToday)
