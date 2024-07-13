@@ -54,14 +54,18 @@ function peopleIsValid(req, res, next){
 function reservationDateIsValid(req, res, next){
   const { data: { reservation_date } = {} } = req.body;
 
+  let message = `reservation_date cannot be null`;
+
   if (reservation_date){
-    if (dateIsValid(reservation_date)){
+    message = dateIsValid(reservation_date);
+    if (!message || message === "today"){
+      res.locals.isToday = message === "today";
       return next();
     }
   }
   next({
     status: 400,
-    message: `reservation_date must be in the YYYY-MM-DD format and be a valid date. Received ${reservation_date}`
+    message,
   });
 }
 
@@ -72,14 +76,17 @@ function reservationDateIsValid(req, res, next){
 function reservationTimeIsValid(req, res, next){
   const { data: { reservation_time } = {} } = req.body;
 
+  let message = `reservation_time cannot be null`;
+  
   if (reservation_time){
-    if (timeIsValid(reservation_time)){
+    message = timeIsValid(reservation_time, res.locals.isToday);
+    if (!message){
       return next();
     }
   }
   next({
     status: 400,
-    message: `reservation_time must be in the HH:MM:SS format and be a valid time. Received ${reservation_time}`
+    message,
   });
 }
 

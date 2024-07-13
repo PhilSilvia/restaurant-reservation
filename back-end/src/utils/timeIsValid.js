@@ -2,13 +2,13 @@
  * Validation function to check the validity of a time string. 
  * @param {string} time 
  */
-function timeIsValid(time) {
+function timeIsValid(time, isToday = false) {
     if (time){
         const regex1 = /^\d{2}:\d{2}:\d{2}$/;
         const regex2 = /^\d{2}:\d{2}$/;
         
         if (!(time.match(regex1) || time.match(regex2))){
-            return false;
+            return `reservation_time must be in the HH:MM:SS or HH:MM format. Received ${time}`;
         }
           
         const parts = time.split(':');
@@ -17,12 +17,25 @@ function timeIsValid(time) {
         const seconds = Number(parts[2]);
   
         if (hour < 0 || hour > 24 || minutes < 0 || minutes > 60)
-            return false;
+            return `reservation_time must be a valid time. Received ${time}`;;
         if (seconds && (seconds < 0 || seconds > 60))
-            return false;
-        return true;
+            return `reservation_time must be a valid time. Received ${time}`;;
+
+        if (isToday){
+            const today = new Date();
+            const hoursNow = Number(today.getHours());
+            const minutesNow = Number(today.getMinutes());
+
+            console.log(`Comparing ${hour} to ${hoursNow} and ${minutes} to ${minutesNow}`);
+
+            if (hour < hoursNow)
+                return `reservation_time must be a time in the future. Received ${time}`;
+            if (hour === hoursNow && minutes < minutesNow)
+                return `reservation_time must be a time in the future. Received ${time}`;
+        }
+        return null;
     }
-    return false
+    return `reservation_time must not be null. Received ${time}`;
   }
 
 module.exports = timeIsValid;
