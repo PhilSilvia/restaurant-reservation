@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { convertToDate, compareDates, compareTimes } from "../utils/date-time";
 import { createReservation } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 
@@ -21,9 +22,40 @@ function ReservationForm(){
     const [ submissionError, setSubmissionError ] = useState(null);
     const navigate = useNavigate();
 
-    // Checks the data to see if all fields are valid
-    // Fields are valid if they are not null
-    // The "people" field needs to be greater than 0
+    
+    /**
+     * Validation checker for the reservation date.
+     * Ensure the date is not in the past and not on a Tuesday, when the restaurant is closed.
+     * @param {string} date 
+     * @returns {Error} error 
+     * Returns an error with an error message if the date is invalid, otherwise returns null.
+     */
+    function validateTheDateAndTime(date, time){
+        const realDate = convertToDate(date);
+        const today = new Date();
+        // Compare the date to today
+        if (compareDates(realDate, today) < 0){
+            return new Error(`Reservations must be made for the future, please choose a valid date.`);
+        }
+        // Get the day of the week for the date
+        const dayOfWeek = realDate.getDay();
+        // Make sure the date isn't a Tuesday
+        if (dayOfWeek === 2){
+            return new Error(`Reservations cannot be made on Tuesdays, please choose a day when the restaurant is open.`);
+        }
+        const now = `${today.getHours()}:${today.getMinutes()}`;
+        if (compareTimes(time, now) <= 0)
+            return new Error(`Reservations must be made for the future, please choose a valid time.`)
+        return null;
+    }
+
+    /** Checks the data to see if all fields are valid.
+     * Fields are valid if they are not null.
+     * The "people" field needs to be greater than 0.
+     * @param {object} data
+     * @returns {Error} error
+     * Returns an error with an error message if the data is invalid, otherwise returns null.
+     */
     const checkForValidData = (data) => {
         // Map for the variable name to a more user-friendly name
         const fieldMap = new Map([
@@ -46,6 +78,8 @@ function ReservationForm(){
         // If the party size is 0 or fewer, return an error for that, too
         if (Number(data["people"]) <= 0)
             return new Error("Party size must be a number greater than zero")
+        // Check to ensure the date and time are in the future and not a Tuesday
+        return validateTheDateAndTime(data.reservation_date, data.reservation_time);
     }
 
     // Event handler for when the form's values are changed, 
@@ -58,6 +92,7 @@ function ReservationForm(){
     // Submission handler for when the user clicks on the Submit button
     const handleSubmission = (event) => {
         event.preventDefault();
+        setSubmissionError(null);
         // Validate the form data, and display an error if something is awry
         setSubmissionError(checkForValidData(formData));
         // If we have no errors, we proceed with the submission

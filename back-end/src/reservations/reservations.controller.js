@@ -38,7 +38,6 @@ function bodyDataHas(propertyName){
  */
 function peopleIsValid(req, res, next){
   const { data: { people } = {} } = req.body;
-  console.log(typeof(people));
   if (typeof(people) === "number" && people > 0){
       return next();
   }
