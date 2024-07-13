@@ -1,3 +1,5 @@
+const checkForTuesday = require("./checkForTuesday");
+
 /**
  * Validation function to check the validity of a date string. 
  * TODO: Does not account for a leap year. 
@@ -45,8 +47,9 @@ function dateIsValid(date){
     if (year === yearToday && month === monthToday && day < dayToday)
       return `reservation_date must be in the future. Received ${date}`;;
 
+    
     // Make sure it's not a Tuesday
-    if (today.getDay() === 2)
+    if (checkForTuesday(date))
       return `reservation_date cannot be a Tuesday. Received ${date}`;;
 
     // If the date matches today's date, return that it's today
