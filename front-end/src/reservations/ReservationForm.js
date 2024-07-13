@@ -34,7 +34,8 @@ function ReservationForm(){
         const realDate = convertToDate(date);
         const today = new Date();
         // Compare the date to today
-        if (compareDates(realDate, today) < 0){
+        const dateComparison = compareDates(realDate, today);
+        if (dateComparison < 0){
             return new Error(`Reservations must be made for the future, please choose a valid date.`);
         }
         // Get the day of the week for the date
@@ -43,9 +44,12 @@ function ReservationForm(){
         if (dayOfWeek === 2){
             return new Error(`Reservations cannot be made on Tuesdays, please choose a day when the restaurant is open.`);
         }
-        const now = `${today.getHours()}:${today.getMinutes()}`;
-        if (compareTimes(time, now) <= 0)
-            return new Error(`Reservations must be made for the future, please choose a valid time.`)
+        if (dateComparison === 0){
+            const now = `${today.getHours()}:${today.getMinutes()}`;
+            if (compareTimes(time, now) <= 0){
+                return new Error(`Reservations must be made for the future, please choose a valid time.`);;
+            }
+        }
         return null;
     }
 
@@ -94,9 +98,10 @@ function ReservationForm(){
         event.preventDefault();
         setSubmissionError(null);
         // Validate the form data, and display an error if something is awry
-        setSubmissionError(checkForValidData(formData));
+        const error = checkForValidData(formData);
+        setSubmissionError(error);
         // If we have no errors, we proceed with the submission
-        if (!submissionError){
+        if (!error){
             // Submit the reservation data to the back-end
             const abortController = new AbortController();
             setSubmissionError(null);

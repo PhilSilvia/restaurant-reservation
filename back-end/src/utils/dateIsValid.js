@@ -7,12 +7,14 @@ function dateIsValid(date){
   if (date){
     const regex = /^\d{4}-\d{2}-\d{2}$/;
     
+    // Make sure the date is in a valid format
     if (!date.match(regex)){
       return false;
     }
-    
+
+    // Break up the date into its parts
     const parts = date.split('-');
-    //const year = parts[0];
+    const year = Number(parts[0]);
     const month = Number(parts[1]);
     const day = Number(parts[2]);
       
@@ -24,6 +26,21 @@ function dateIsValid(date){
       return false;
     if (month === 2 && day > 28)
       return false;
+
+    // Get today's date and break it up into its parts
+    const today = new Date();
+    const yearToday = Number(today.getFullYear());
+    const monthToday = Number(today.getMonth());
+    const dayToday = Number(today.getDate());
+
+    if (year < yearToday){
+      if (month < monthToday){
+        if (day < dayToday){
+          return false;
+        }
+      }
+    }
+
     return true;
   
   }
