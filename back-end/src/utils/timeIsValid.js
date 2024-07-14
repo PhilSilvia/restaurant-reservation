@@ -25,9 +25,9 @@ function timeIsValid(time, isToday = false) {
             return `reservation_time must be a valid time. Received ${time}`;;
 
         // Make sure the time falls within the hours the restaurant is open
-        const openingHour = 9;
+        const openingHour = 10;
         const openingMinutes = 30;
-        const closingHour = 22;
+        const closingHour = 21;
         const closingMinutes = 30;
         if (hour < openingHour || (hour === openingHour && minutes < openingMinutes))
             return `reservation_time must be after the restaurant opens at ${openingHour}:${openingMinutes}`;
