@@ -4,6 +4,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import Dashboard from "../dashboard/Dashboard";
 import NotFound from "./NotFound";
 import ReservationNew from "../reservations/ReservationNew";
+import ReservationSeat from "../reservations/ReservationSeat";
 import TableNew from "../tables/TableNew";
 
 /**
@@ -20,6 +21,7 @@ function RootRoutes() {
       <Route exact={true} path="/reservations" element={<Navigate to={"/dashboard"} />} />
       <Route path="/tables/new" element={<TableNew />} />
       <Route path="/reservations/new" element={<ReservationNew />} />
+      <Route path="/reservations/:reservation_id/seat" element={<ReservationSeat />} />
       <Route path="/dashboard" element={<Dashboard />} />
       <Route element={<NotFound />} />
     </Routes>

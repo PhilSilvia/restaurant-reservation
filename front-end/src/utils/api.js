@@ -73,7 +73,15 @@ export async function listTables(params, signal){
   Object.entries(params).forEach(([key, value]) =>
     url.searchParams.append(key, value.toString())
   );
+  return await fetchJson(url, { headers, signal }, []);
+}
+
+export async function readReservation(params, signal){
+  const { reservationId } = params;
+  const url = new URL(`${API_BASE_URL}/reservations/${reservationId}`);
   return await fetchJson(url, { headers, signal }, [])
+    //.then(formatReservationDate)
+    //.then(formatReservationTime);
 }
 
 /**
@@ -95,7 +103,7 @@ export async function createReservation(reservation, signal){
 }
 
 /**
- * Creates a new reservation
+ * Creates a new table
  */
 export async function createTable(table, signal){
   const url = new URL(`${API_BASE_URL}/tables`);

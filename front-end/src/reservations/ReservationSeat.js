@@ -1,0 +1,38 @@
+import ReservationDetails from "./ReservationDetails";
+import React, { useState, useEffect } from 'react';
+import { useParams } from "react-router";
+import { readReservation } from "../utils/api";
+import ErrorAlert from "../layout/ErrorAlert";
+
+function ReservationSeat(){
+    const [reservation, setReservation] = useState({});
+    const [reservationError, setReservationError] = useState(null);
+    const { reservationId } = useParams();
+
+    function loadReservation(){
+        const abortController = new AbortController();
+        setReservationError(null);
+        readReservation({ reservationId }, abortController.signal)
+            .then(setReservation)
+            .catch(setReservationError);
+    }
+
+    useEffect(loadReservation, [reservationId]);
+
+    return (
+        <div className="mt-4">
+            <h2>Hello can you hear me?</h2>
+            <ReservationDetails 
+                first_name={reservation.first_name}
+                last_name={reservation.last_name}
+                mobile_number={reservation.mobile_number}
+                reservation_date={reservation.reservation_date}
+                reservation_time={reservation.reservation_time}
+                people={reservation.people}
+            />
+            <ErrorAlert error={reservationError} />
+        </div>
+    );
+}
+
+export default ReservationSeat;

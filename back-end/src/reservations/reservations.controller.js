@@ -10,7 +10,7 @@ async function list(req, res) {
   const { date } = req.query;
   let data = {};
   if (date){
-    data = await service.read(date);
+    data = await service.readDate(date);
   } else {
     data = await service.list();
   }
@@ -117,6 +117,29 @@ async function create(req, res){
   res.status(201).json({ data: response });
 }
 
+/**
+ * Validation middleware function to ensure a specified reservation exists.
+ */
+async function reservationExists(req, res, next){
+  const { reservationId } = req.params;
+  const reservation = await service.read(reservationId);
+  if (reservation && reservation.length > 0){
+    res.locals.reservation = reservation;
+    return next();
+  }
+  next({
+    status: 404,
+    message: `Reservation id ${reservationId} cannot be found`,
+  });
+}
+
+/**
+ * Read handler for a specified reservation
+ */
+async function read(req, res){
+  res.status(201).json({ data: res.locals.reservation });
+}
+
 module.exports = {
   list: asyncErrorBoundary(list),
   create: [
@@ -131,4 +154,8 @@ module.exports = {
     reservationTimeIsValid,
     asyncErrorBoundary(create)
   ],
+  read: [
+    asyncErrorBoundary(reservationExists),
+    read,
+  ]
 };
