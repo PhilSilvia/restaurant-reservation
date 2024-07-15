@@ -9,29 +9,23 @@ import { convertToDate, compareDates, compareTimes } from "../utils/date-time";
 * Returns an error with an error message if the data is invalid, otherwise returns null.
 */
 export function checkForValidReservationData(data) {
-   // Map for the variable name to a more user-friendly name
-   const fieldMap = new Map([
+    // Map for the variable name to a more user-friendly name
+    const fieldMap = new Map([
        ["first_name", "First Name"], 
        ["last_name", "Last Name"], 
        ["mobile_number", "Mobile Phone Number"], 
        ["reservation_date", "Reservation Data"], 
        ["reservation_time", "Reservation Time"], 
        ["people", "Party Size"]]);
-   // Array of the fields for easy iterating
-   const fields = [...fieldMap.keys()];
-   // Go through each field
-   for (let i = 0; i < fields.length; i++){
-       const field = fields[i];
-       // If a field is null, then return an error necessitating that field
-       if (!data[field]){
-           return new Error(`${fieldMap.get(field)} is required`);
-       }
-   }
-   // If the party size is 0 or fewer, return an error for that, too
-   if (Number(data["people"]) <= 0)
+    // Check for any missing fields
+    const error = hasFields(data, fieldMap);
+    if (error)
+        return error;
+    // If the party size is 0 or fewer, return an error for that, too
+    if (Number(data["people"]) <= 0)
        return new Error("Party size must be a number greater than zero")
-   // Check to ensure the date and time are in the future and not a Tuesday
-   return validateTheDateAndTime(data.reservation_date, data.reservation_time);
+    // Check to ensure the date and time are in the future and not a Tuesday
+    return validateTheDateAndTime(data.reservation_date, data.reservation_time);
 }
 
 /**
@@ -43,16 +37,48 @@ export function checkForValidReservationData(data) {
  * Returns an error with an error message if the data is invalid, otherwise returns null
  */
 export function checkForValidTableData(data){
-
+    // Map for the variable name to a more user-friendly name
+    const fieldMap = new Map([
+        ["table_name", "Table Name"], 
+        ["table_capacity", "Seating Capacity"], 
+    ]);
+    // Check for any missing fields
+    const error = hasFields(data, fieldMap);
+    if (error) 
+        return error;
+    // If the table's capacity is 0 or fewer, return an error for that, too
+    if (Number(data["table_capacity"]) <= 0)
+        return new Error("Seating capacity must be a number greater than zero");
+    return null;
 }
 
 /**
-     * Validation checker for the reservation date.
-     * Ensure the date is not in the past and not on a Tuesday, when the restaurant is closed.
-     * @param {string} date 
-     * @returns {Error} error 
-     * Returns an error with an error message if the date is invalid, otherwise returns null.
-     */
+ * Validation checker to ensure the given data includes all of the fields in a given Map.
+ * @param {object} data
+ * @param {Map} fieldMap
+ * @returns {Error} error
+ * Returns an error with a helpful message if any field is missing, otherwise returns null.
+ */
+function hasFields(data, fieldMap){
+    // Array of the fields for easy iterating
+    const fields = [...fieldMap.keys()];
+    // Go through each field
+    for (let i = 0; i < fields.length; i++){
+        const field = fields[i];
+        // If a field is null, then return an error necessitating that field
+        if (!data[field])
+            return new Error(`${fieldMap.get(field)} is required`);
+    }
+    return null;
+}
+
+/**
+ * Validation checker for the reservation date.
+ * Ensure the date is not in the past and not on a Tuesday, when the restaurant is closed.
+ * @param {string} date 
+ * @returns {Error} error 
+ * Returns an error with an error message if the date is invalid, otherwise returns null.
+*/
 function validateTheDateAndTime(date, time){
     const realDate = convertToDate(date);
     const today = new Date();
