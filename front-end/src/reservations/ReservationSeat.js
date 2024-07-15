@@ -13,15 +13,17 @@ function ReservationSeat(){
         const abortController = new AbortController();
         setReservationError(null);
         readReservation({ reservationId }, abortController.signal)
-            .then(setReservation)
+            .then((reservation) => {
+                setReservation(reservation[0]);
+            })
             .catch(setReservationError);
+        return () => abortController.abort();
     }
 
     useEffect(loadReservation, [reservationId]);
 
     return (
         <div className="mt-4">
-            <h2>Hello can you hear me?</h2>
             <ReservationDetails 
                 first_name={reservation.first_name}
                 last_name={reservation.last_name}

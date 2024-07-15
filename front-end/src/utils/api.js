@@ -79,7 +79,14 @@ export async function listTables(params, signal){
 export async function readReservation(params, signal){
   const { reservationId } = params;
   const url = new URL(`${API_BASE_URL}/reservations/${reservationId}`);
-  return await fetchJson(url, { headers, signal }, [])
+  console.log(`Reading from ${url}`);
+  return await fetchJson(url, 
+    { 
+      method: "GET",
+      headers, 
+      signal 
+    },
+  );
     //.then(formatReservationDate)
     //.then(formatReservationTime);
 }

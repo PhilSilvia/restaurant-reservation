@@ -21,7 +21,7 @@ function RootRoutes() {
       <Route exact={true} path="/reservations" element={<Navigate to={"/dashboard"} />} />
       <Route path="/tables/new" element={<TableNew />} />
       <Route path="/reservations/new" element={<ReservationNew />} />
-      <Route path="/reservations/:reservation_id/seat" element={<ReservationSeat />} />
+      <Route path="/reservations/:reservationId/seat" element={<ReservationSeat />} />
       <Route path="/dashboard" element={<Dashboard />} />
       <Route element={<NotFound />} />
     </Routes>
