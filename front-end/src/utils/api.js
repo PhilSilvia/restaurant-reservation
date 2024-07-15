@@ -87,8 +87,26 @@ export async function createReservation(reservation, signal){
       method: "POST",
       headers,
       body,
+      signal,
     },
   )
     .then(formatReservationDate)
     .then(formatReservationTime);
+}
+
+/**
+ * Creates a new reservation
+ */
+export async function createTable(table, signal){
+  const url = new URL(`${API_BASE_URL}/tables`);
+  console.log(`Sending request to ${url}`)
+  const body = JSON.stringify({ data: table });
+  return await fetchJson(url, 
+    {
+      method: "POST",
+      headers,
+      body,
+      signal,
+    },
+  );
 }

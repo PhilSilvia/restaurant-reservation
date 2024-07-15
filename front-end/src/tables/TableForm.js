@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { createTable } from "../utils/api";
 import { checkForValidTableData } from "../validation/validationChecks";
 import ErrorAlert from "../layout/ErrorAlert";
 
@@ -23,10 +24,24 @@ function TableForm(){
         event.preventDefault();
         setSubmissionError(null);
         const error = checkForValidTableData(formData);
+        console.log(error);
         setSubmissionError(error)
+        // If we have no errors, we proceed with the submission
         if (!error){
-            // Submit the form data to the api
-            navigate("/");
+            // Submit the reservation data to the back-end
+            const abortController = new AbortController();
+            setSubmissionError(null);
+            // Ensures the 'capacity' value is a number
+            const data = {...formData, "capacity": Number(formData.capacity)};
+            console.log(`Sending data to API: ${data}`)
+            createTable(data, abortController.signal)
+                .then(() => {
+                    console.log("About to navigate back to the dashboard");
+                    navigate("/")
+                })
+                .catch((error) => {
+                    setSubmissionError(error);
+                });
         }
     }
 
