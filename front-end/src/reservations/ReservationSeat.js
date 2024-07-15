@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from "react-router";
 import { readReservation } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
+import ReservationSeatingForm from "./ReservationSeatingForm";
 
 function ReservationSeat(){
     const [reservation, setReservation] = useState({});
@@ -23,16 +24,25 @@ function ReservationSeat(){
     useEffect(loadReservation, [reservationId]);
 
     return (
-        <div className="mt-4">
-            <ReservationDetails 
-                first_name={reservation.first_name}
-                last_name={reservation.last_name}
-                mobile_number={reservation.mobile_number}
-                reservation_date={reservation.reservation_date}
-                reservation_time={reservation.reservation_time}
-                people={reservation.people}
-            />
-            <ErrorAlert error={reservationError} />
+        <div className="col">
+            <div className="row">
+                <div className="my-4 by-2">
+                    <ReservationDetails 
+                        first_name={reservation.first_name}
+                        last_name={reservation.last_name}
+                        mobile_number={reservation.mobile_number}
+                        reservation_date={reservation.reservation_date}
+                        reservation_time={reservation.reservation_time}
+                        people={reservation.people}
+                    />
+                </div>
+            </div>
+            <div className="row">
+                <ReservationSeatingForm />
+            </div>
+            <div className="row">
+                <ErrorAlert error={reservationError} />
+            </div>
         </div>
     );
 }
