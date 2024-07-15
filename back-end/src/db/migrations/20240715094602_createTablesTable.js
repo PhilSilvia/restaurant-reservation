@@ -5,9 +5,16 @@ exports.up = function(knex) {
         table.string("table_name").notNullable();
         table.string("table_state");
         table.integer("table_capacity").notNullable();
+        table.integer("reservation_id").unsigned();
+        table
+          .foreign("reservation_id")
+          .references("reservation_id")
+          .inTable("reservations")
+          .onDelete("cascade");
+        table.timestamps(true, true);
     });
 };
 
 exports.down = function(knex) {
-    return knex.schema.dropTable("reservations");
+    return knex.schema.dropTableIfExists("tables");
 };
