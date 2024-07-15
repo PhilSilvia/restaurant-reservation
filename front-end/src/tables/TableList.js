@@ -8,6 +8,7 @@ function TableList({ tables = [] }){
                 <TableDisplay 
                     table_name={table.table_name}
                     status={table.status}
+                    table_id={table.table_id}
                 />
             ));
         

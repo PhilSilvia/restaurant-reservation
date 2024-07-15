@@ -2,6 +2,36 @@ const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const service = require("./tables.service");
 
 /**
+ * Validation helper function for the reservation validation
+ * @param {string} propertyName 
+ * @returns 
+ */
+function bodyDataHas(propertyName){
+  return function (req, res, next) {
+    const { data = {} } = req.body;
+    if (data[propertyName]) {
+      return next();
+    }
+    next({ status: 400, message: `Must include a ${propertyName}` });
+  };
+}
+
+/**
+ * Validation helper function for the people parameter in a new or updated reservation.
+ * Ensures that the people parameter is greater than 0. 
+ */
+function capacityIsValid(req, res, next){
+  const { data: { capacity } = {} } = req.body;
+  if (typeof(capacity) === "number" && capacity > 0){
+      return next();
+  }
+  next({ 
+      status: 400, 
+      message: `Value of the 'capacity' property must be a number greater than 0. Received ${capacity}.`
+  });
+}
+
+/**
  * List handler for tables resources
  */
 async function list(req, res) {
@@ -10,15 +40,27 @@ async function list(req, res) {
   }
 
 function read(req, res){
-    
+  res.json({});
 }
 
-function create(req, res){
-
+async function create(req, res){
+  const { data: { table_name, capacity } = {} } = req.body;
+  const newTable = {
+    table_name,
+    capacity,
+    status: "Free",
+  };
+  const response = await service.create(newTable);
+  res.status(201).json({ data: response });
 }
 
 module.exports = {
     list : asyncErrorBoundary(list),
     read,
-    create,
+    create: [
+      bodyDataHas("table_name"),
+      bodyDataHas("capacity"),
+      capacityIsValid,
+      asyncErrorBoundary(create),
+    ],
 };

@@ -24,7 +24,6 @@ function TableForm(){
         event.preventDefault();
         setSubmissionError(null);
         const error = checkForValidTableData(formData);
-        console.log(error);
         setSubmissionError(error)
         // If we have no errors, we proceed with the submission
         if (!error){
@@ -33,10 +32,8 @@ function TableForm(){
             setSubmissionError(null);
             // Ensures the 'capacity' value is a number
             const data = {...formData, "capacity": Number(formData.capacity)};
-            console.log(`Sending data to API: ${data}`)
             createTable(data, abortController.signal)
                 .then(() => {
-                    console.log("About to navigate back to the dashboard");
                     navigate("/")
                 })
                 .catch((error) => {
