@@ -7,6 +7,7 @@ function TableForm(){
     const [formData, setFormData] = useState({
         table_name: "",
         capacity: 1,
+        status: "Free",
     });
     const [ submissionError, setSubmissionError ] = useState(null);
     const navigate = useNavigate();

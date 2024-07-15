@@ -4,6 +4,7 @@ import ReservationList from "../reservations/ReservationList";
 import ErrorAlert from "../layout/ErrorAlert";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { today, previous, next } from "../utils/date-time";
+import TableList from "../tables/TableList";
 
 /**
  * Defines the dashboard page.
@@ -13,6 +14,8 @@ import { today, previous, next } from "../utils/date-time";
 function Dashboard() {
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
+  const [tables, setTables] = useState([]);
+  const [tablesError, setTablesError] = useState(null);
   // Retrieves the query parameters
   const [searchParams] = useSearchParams();
   // Sets the date to the value from the query parameters, or today if none are defined
@@ -45,14 +48,24 @@ function Dashboard() {
   return (
     <main>
       <h1>Dashboard</h1>
-      <div className="col">
-        <div className="d-md-flex flex-column mb-3">
-          <h4 className="mb-0">Reservations for date {date}</h4>
-          <ReservationList reservations={reservations}/>
+      <div className="row">
+        <div className="col-6">
+          <div className="d-md-flex flex-column mb-3">
+            <h4 className="mb-0">Reservations for date {date}</h4>
+            <div className="row">
+              <button type="button" onClick={previousClickHandler} className="btn btn-primary" >Previous</button>
+              <button type="button" onClick={nextClickHandler} className="btn btn-primary">Next</button>
+              <button type="button" onClick={todayClickHandler} className="btn btn-success">Today</button>
+            </div>
+            <ReservationList reservations={reservations}/>
+          </div>
         </div>
-        <button type="button" onClick={previousClickHandler} className="btn btn-primary" >Previous</button>
-        <button type="button" onClick={nextClickHandler} className="btn btn-primary">Next</button>
-        <button type="button" onClick={todayClickHandler} className="btn btn-success">Today</button>
+        <div className="col-6">
+          <div className="d-md-flex flex-column mb-3">
+            <h4 className="mb-0">Tables</h4>
+            <TableList tables={tables}/>
+          </div>
+        </div>
       </div>
       <ErrorAlert error={reservationsError} />
     </main>
