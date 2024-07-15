@@ -1,13 +1,14 @@
 import { convertToDate, compareDates, compareTimes } from "../utils/date-time";
 
-/** Checks the data to see if all fields are valid.
+/** 
+* Checks to see if all of the fields in the given form data for a reservation are valid. 
 * Fields are valid if they are not null.
 * The "people" field needs to be greater than 0.
 * @param {object} data
 * @returns {Error} error
 * Returns an error with an error message if the data is invalid, otherwise returns null.
 */
-export function checkForValidData(data) {
+export function checkForValidReservationData(data) {
    // Map for the variable name to a more user-friendly name
    const fieldMap = new Map([
        ["first_name", "First Name"], 
@@ -31,6 +32,18 @@ export function checkForValidData(data) {
        return new Error("Party size must be a number greater than zero")
    // Check to ensure the date and time are in the future and not a Tuesday
    return validateTheDateAndTime(data.reservation_date, data.reservation_time);
+}
+
+/**
+ * Checks to see if all of the fields in the given form data for a table are valid. 
+ * Fields are valid if they are not null.
+ * The capacity value must be greater than 0.
+ * @param {object} data 
+ * @returns {Error} error
+ * Returns an error with an error message if the data is invalid, otherwise returns null
+ */
+export function checkForValidTableData(data){
+
 }
 
 /**

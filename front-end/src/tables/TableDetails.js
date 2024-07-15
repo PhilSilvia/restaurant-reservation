@@ -4,4 +4,4 @@ function TableDetails(){
     
 }
 
-module.exports = TableDetails;
+export default TableDetails;

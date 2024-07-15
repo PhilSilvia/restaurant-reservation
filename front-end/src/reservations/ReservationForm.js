@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createReservation } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
-import { checkForValidData } from "../validation/validationChecks";
+import { checkForValidReservationData } from "../validation/validationChecks";
 
 /**
  * Reservation form for submitting a new reservation to the restaurant system.
@@ -34,7 +34,7 @@ function ReservationForm(){
         event.preventDefault();
         setSubmissionError(null);
         // Validate the form data, and display an error if something is awry
-        const error = checkForValidData(formData);
+        const error = checkForValidReservationData(formData);
         setSubmissionError(error);
         // If we have no errors, we proceed with the submission
         if (!error){

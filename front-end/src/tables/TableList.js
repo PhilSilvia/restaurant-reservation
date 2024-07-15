@@ -4,4 +4,4 @@ function TableList(){
 
 }
 
-module.exports = TableList;
+export default TableList;
