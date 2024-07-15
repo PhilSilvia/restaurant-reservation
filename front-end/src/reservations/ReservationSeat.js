@@ -27,6 +27,7 @@ function ReservationSeat(){
         <div className="col">
             <div className="row">
                 <div className="my-4 by-2">
+                    <h1>Reservation Details</h1>
                     <ReservationDetails 
                         first_name={reservation.first_name}
                         last_name={reservation.last_name}
@@ -38,7 +39,7 @@ function ReservationSeat(){
                 </div>
             </div>
             <div className="row">
-                <ReservationSeatingForm />
+                <ReservationSeatingForm reservation={reservation}/>
             </div>
             <div className="row">
                 <ErrorAlert error={reservationError} />

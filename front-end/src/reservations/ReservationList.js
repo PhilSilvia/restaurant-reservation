@@ -5,6 +5,8 @@ import { useNavigate } from "react-router";
 function ReservationList({ reservations = []}){
     const navigate = useNavigate();
 
+    // TODO: Find a way to nest the Seat button inside the card for the ReservationDetails, but still share
+    // ReservationDetails with ReservationSeat element
     if (reservations.length){
         const list = reservations
             .map((reservation) => (
