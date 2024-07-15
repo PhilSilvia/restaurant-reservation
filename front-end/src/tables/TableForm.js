@@ -6,7 +6,7 @@ import ErrorAlert from "../layout/ErrorAlert";
 function TableForm(){
     const [formData, setFormData] = useState({
         table_name: "",
-        table_capacity: 0,
+        capacity: 1,
     });
     const [ submissionError, setSubmissionError ] = useState(null);
     const navigate = useNavigate();
@@ -25,6 +25,7 @@ function TableForm(){
         setSubmissionError(error)
         if (!error){
             // Submit the form data to the api
+            navigate("/");
         }
     }
 
@@ -50,15 +51,15 @@ function TableForm(){
                     </label>
                 </div>
                 <div className="form-group">
-                    <label htmlFor="table-capacity">
+                    <label htmlFor="capacity">
                         Seating capacity
                         <input 
                             type="number"
                             className="form-control" 
-                            name="table_capacity" 
-                            id="table_capacity" 
+                            name="capacity" 
+                            id="capacity" 
                             onChange={handleChange} 
-                            value={formData.table_capacity}
+                            value={formData.capacity}
                         />
                     </label>
                 </div>

@@ -3,8 +3,8 @@ exports.up = function(knex) {
     return knex.schema.createTable("tables", (table) => {
         table.increments("tables_id").primary();
         table.string("table_name").notNullable();
-        table.string("table_state");
-        table.integer("table_capacity").notNullable();
+        table.string("status");
+        table.integer("capacity").notNullable();
         table.integer("reservation_id").unsigned();
         table
           .foreign("reservation_id")

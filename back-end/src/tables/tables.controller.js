@@ -1,6 +1,20 @@
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const service = require("./tables.service");
 
-module.exports = {
+function list(req, res){
 
+}
+
+function read(req, res){
+    
+}
+
+function create(req, res){
+
+}
+
+module.exports = {
+    list,
+    read,
+    create,
 };

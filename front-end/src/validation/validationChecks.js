@@ -40,14 +40,14 @@ export function checkForValidTableData(data){
     // Map for the variable name to a more user-friendly name
     const fieldMap = new Map([
         ["table_name", "Table Name"], 
-        ["table_capacity", "Seating Capacity"], 
+        ["capacity", "Seating Capacity"], 
     ]);
     // Check for any missing fields
     const error = hasFields(data, fieldMap);
     if (error) 
         return error;
     // If the table's capacity is 0 or fewer, return an error for that, too
-    if (Number(data["table_capacity"]) <= 0)
+    if (Number(data["capacity"]) <= 0)
         return new Error("Seating capacity must be a number greater than zero");
     return null;
 }

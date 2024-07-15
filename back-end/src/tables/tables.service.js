@@ -1,5 +1,19 @@
 const knex = require("../db/connection");
 
-module.exports = {
+function list(){
+    return knex("tables").select("*");
+}
 
+function read(tableId){
+
+}
+
+function write(newTable){
+
+}
+
+module.exports = {
+    list,
+    read,
+    write,
 };
