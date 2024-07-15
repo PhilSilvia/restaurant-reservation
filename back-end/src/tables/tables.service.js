@@ -1,14 +1,14 @@
 const knex = require("../db/connection");
 
-function list(){
+async function list(){
     return knex("tables").select("*");
 }
 
-function read(tableId){
+async function read(tableId){
 
 }
 
-function write(newTable){
+async function write(newTable){
 
 }
 
