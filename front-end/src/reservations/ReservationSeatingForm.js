@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
-import { listTables } from '../utils/api';
+import { listTables, seatTable } from '../utils/api';
 import ErrorAlert from '../layout/ErrorAlert';
 import { checkForValidTable } from '../validation/validationChecks';
 
@@ -29,29 +29,34 @@ function ReservationSeatingForm({ reservation }){
         setSelectedTable(value);
     };
 
+    // Submission handler for the form
     function handleSubmission(event){
         event.preventDefault();
         setSubmissionError(null);
+        // Ensure that the selected table is a valid choice
         const error = checkForValidTable(selectedTable, tables, reservation);
+        // Set the submission error, if there was one
         setSubmissionError(error);
+        // If there were no errors, proceed with the submission
         if (!error){
-            //const abortController = new AbortController();
-            //setSubmissionError(null);
-        }
-        // If we have no errors, we proceed with the submission
-        //if (!error){
-            // Submit the reservation data to the back-end
-            
-            // Ensures the 'capacity' value is a number
-            /*const data = {...formData, "capacity": Number(formData.capacity)};
-            createTable(data, abortController.signal)
+            const abortController = new AbortController();
+            setSubmissionError(null);
+            // Build the body of our request from the selected table's data
+            const tableData = tables.find((table) => Number(selectedTable) === Number(table.table_id));
+            // Change the status of the table and assign it to the reservation's id
+            const data = {
+                ...tableData,
+                status: "Occupied",
+                reservation_id: reservation.reservation_id,
+            };
+            seatTable(data, abortController.signal)
                 .then(() => {
-                    navigate("/")
+                    navigate("/");
                 })
                 .catch((error) => {
-                    setSubmissionError(error);
-                });*/
-        //}
+                    setSubmissionError(error)
+                });
+        }
     }
 
     function handleCancel(event){

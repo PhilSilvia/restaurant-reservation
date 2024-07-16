@@ -123,3 +123,35 @@ export async function createTable(table, signal){
     },
   );
 }
+
+/**
+ * Seats a table
+ */
+export async function seatTable(updatedTable, signal){
+  const url = new URL(`${API_BASE_URL}/tables/${updatedTable.table_id}/seat`);
+  const body = JSON.stringify({ data: updatedTable });
+  return await fetchJson(url, 
+    {
+      method: "PUT",
+      headers,
+      body,
+      signal,
+    },
+  );
+}
+
+/**
+ * Updates an existing table
+ */
+export async function updateTable(updatedTable, signal){
+  const url = new URL(`${API_BASE_URL}/tables/${updatedTable.table_id}`);
+  const body = JSON.stringify({ data: updatedTable });
+  return await fetchJson(url, 
+    {
+      method: "PUT",
+      headers,
+      body,
+      signal,
+    },
+  );
+}
