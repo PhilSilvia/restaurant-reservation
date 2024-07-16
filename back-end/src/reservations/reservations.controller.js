@@ -104,14 +104,15 @@ function reservationTimeIsValid(req, res, next){
  * Create handler for reservation resources
  */
 async function create(req, res){
-  const { data: { first_name, last_name, mobile_number, reservation_date, reservation_time, people } = {} } = req.body;
+  const { data: { first_name, last_name, mobile_number, reservation_date, reservation_time, people, status = "booked" } = {} } = req.body;
   const newReservation = {
     first_name,
     last_name,
     mobile_number, 
     reservation_date,
     reservation_time,
-    people
+    people,
+    status,
   };
   const response = await service.create(newReservation);
   res.status(201).json({ data: response });
