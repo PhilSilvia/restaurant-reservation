@@ -52,7 +52,6 @@ function tableNameIsValid(req, res, next){
  */
 async function tableExists(req, res, next){
   const { tableId } = req.params;
-  console.log(tableId);
   const table = await service.read(tableId);
   if (table && table.length > 0){
     res.locals.table = table[0];
@@ -98,8 +97,6 @@ async function create(req, res){
  */
 function capacityIsSufficient(req, res, next){
   const { reservation, table } = res.locals;
-  console.log(reservation);
-  console.log(`Comparing capacity of ${table.capacity} to party size of ${reservation.people}`);
   if (table.capacity >= reservation.people){
     return next();
   }
@@ -150,7 +147,6 @@ async function update(req, res){
     table_id: res.locals.table.table_id,
     status: res.locals.status? res.locals.status : res.body.data.status,
   };
-  console.log(updatedTable);
   const data = await service.update(updatedTable);
   res.status(200).json({ data });
 }

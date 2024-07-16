@@ -7,7 +7,7 @@ import ErrorAlert from "../layout/ErrorAlert";
 function TableForm(){
     const [formData, setFormData] = useState({
         table_name: "",
-        capacity: 1,
+        capacity: "",
         status: "Free",
     });
     const [ submissionError, setSubmissionError ] = useState(null);
@@ -44,7 +44,7 @@ function TableForm(){
 
     function handleCancel(event){
         event.preventDefault();
-        navigate("/");
+        navigate(-1);
     }
 
     return (

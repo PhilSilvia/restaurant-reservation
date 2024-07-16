@@ -69,12 +69,12 @@ function ReservationSeatingForm({ reservation }){
             <form onSubmit={handleSubmission}>
                 <div className="form-group">
                     <label htmlFor="tableSelector">Choose your table</label>
-                    <select className="form-control" id="tableSelector" value={selectedTable} onChange={handleChange} required>
+                    <select name="table_id" className="form-control" id="tableSelector" value={selectedTable} onChange={handleChange} required>
                         <option value="" disabled>Please select a table</option>
                         {tables.map((table) => {
-                            return table.capacity >= reservation.people && table.status === "Free" && (
+                            return (
                                 <option key={table.table_id} value={table.table_id}>
-                                    {table.table_name}: Seating for {table.capacity}
+                                    {table.table_name} - {table.capacity}
                                 </option>
                             )}
                         )}

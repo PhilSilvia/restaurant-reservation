@@ -15,7 +15,7 @@ function ReservationSeat(){
         setReservationError(null);
         readReservation({ reservationId }, abortController.signal)
             .then((reservation) => {
-                setReservation(reservation[0]);
+                setReservation(reservation);
             })
             .catch(setReservationError);
         return () => abortController.abort();
