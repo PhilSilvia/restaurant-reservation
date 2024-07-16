@@ -74,7 +74,6 @@ function ReservationSeatingForm({ reservation }){
                             )}
                         )}
                     </select>
-                    <p>Selectioned option: {selectedTable}</p>
                 </div>
                 <button type="submit" className="btn btn-primary">Submit</button>
                 <button type="cancel" className="btn btn-danger"onClick={handleCancel}>Cancel</button>
@@ -87,4 +86,4 @@ function ReservationSeatingForm({ reservation }){
 
 export default ReservationSeatingForm;
 
-//
+//table.capacity >= reservation.people && table.status === "Free" &&

@@ -5,7 +5,9 @@ async function list(){
 }
 
 async function read(tableId){
-
+    return knex("tables")
+        .select("*")
+        .where({"table_id": tableId});
 }
 
 async function create(newTable){
@@ -15,8 +17,12 @@ async function create(newTable){
         .then((createdRecords) => createdRecords[0]);
 }
 
-async function update(table){
-    
+async function update(updatedTable){
+    return knex("tables")
+        .select("*")
+        .where({ "table_id": updatedTable.table_id })
+        .update(updatedTable, "*")
+        .then((updated) => updated[0]);
 }
 
 module.exports = {

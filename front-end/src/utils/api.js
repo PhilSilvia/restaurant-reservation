@@ -79,7 +79,6 @@ export async function listTables(params, signal){
 export async function readReservation(params, signal){
   const { reservationId } = params;
   const url = new URL(`${API_BASE_URL}/reservations/${reservationId}`);
-  console.log(`Reading from ${url}`);
   return await fetchJson(url, 
     { 
       method: "GET",

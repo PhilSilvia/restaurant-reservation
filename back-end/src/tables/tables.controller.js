@@ -36,9 +36,10 @@ function capacityIsValid(req, res, next){
  */
 async function tableExists(req, res, next){
   const { tableId } = req.params;
+  console.log(tableId);
   const table = await service.read(tableId);
   if (table && table.length > 0){
-    res.locals.table = table;
+    res.locals.table = table[0];
     return next();
   }
   next({
@@ -59,9 +60,12 @@ async function list(req, res) {
  * Read handler for tables resources
  */
 function read(req, res){
-  res.status(201).json({ data: res.locals.table });
+  res.json({ data: res.locals.table });
 }
 
+/**
+ * Create handler for tables resources
+ */
 async function create(req, res){
   const { data: { table_name, capacity } = {} } = req.body;
   const newTable = {
@@ -73,13 +77,26 @@ async function create(req, res){
   res.status(201).json({ data: response });
 }
 
+/**
+ * Update handler for tables resources
+ */
 async function update(req, res){
-
+  const updatedTable = {
+    ...res.locals.table,
+    ...req.body.data,
+    table_id: res.locals.table.table_id,
+  };
+  console.log(updatedTable);
+  const data = await service.update(updatedTable);
+  res.json({ data });
 }
 
 module.exports = {
     list: asyncErrorBoundary(list),
-    read,
+    read: [
+      asyncErrorBoundary(tableExists),
+      asyncErrorBoundary(read),
+    ],
     create: [
       bodyDataHas("table_name"),
       bodyDataHas("capacity"),
