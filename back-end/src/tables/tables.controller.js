@@ -17,8 +17,8 @@ function bodyDataHas(propertyName){
 }
 
 /**
- * Validation helper function for the people parameter in a new or updated reservation.
- * Ensures that the people parameter is greater than 0. 
+ * Validation helper function for the capacity parameter in a new or updated table.
+ * Ensures that the capacity parameter is greater than 0. 
  */
 function capacityIsValid(req, res, next){
   const { data: { capacity } = {} } = req.body;
@@ -28,6 +28,21 @@ function capacityIsValid(req, res, next){
   next({ 
       status: 400, 
       message: `Value of the 'capacity' property must be a number greater than 0. Received ${capacity}.`
+  });
+}
+
+/**
+ * Validation helper function for the table_name parameter in a new or updated table.
+ * Ensure that the table_name is more than a single character.
+ */
+function tableNameIsValid(req, res, next){
+  const { data: { table_name } = {} } = req.body;
+  if (table_name.length > 1){
+    return next();
+  }
+  next({
+    status: 400,
+    message: `The 'table_name' property must be longer than a single character. Received ${table_name}.`
   });
 }
 
@@ -101,11 +116,13 @@ module.exports = {
       bodyDataHas("table_name"),
       bodyDataHas("capacity"),
       capacityIsValid,
+      tableNameIsValid,
       asyncErrorBoundary(create),
     ],
     update: [
       bodyDataHas("table_name"),
       bodyDataHas("capacity"),
+      tableNameIsValid,
       capacityIsValid,
       asyncErrorBoundary(tableExists),
       asyncErrorBoundary(update),

@@ -1,7 +1,8 @@
 const knex = require("../db/connection");
 
 async function list(){
-    return knex("tables").select("*");
+    return knex("tables").select("*")
+        .orderBy("table_name");
 }
 
 async function read(tableId){

@@ -49,6 +49,9 @@ export function checkForValidTableData(data){
     // If the table's capacity is 0 or fewer, return an error for that, too
     if (Number(data["capacity"]) <= 0)
         return new Error("Seating capacity must be a number greater than zero");
+    // The name of the table must be longer than a single character, so return an error if this isn't true
+    if (data["table_name"].length <= 1)
+        return new Error("Table's name must be longer than a single character");
     return null;
 }
 
