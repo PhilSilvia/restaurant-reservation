@@ -56,10 +56,10 @@ function Dashboard() {
         <div className="col-6">
           <div className="d-md-flex flex-column mb-3">
             <h4 className="mb-0">Reservations for date {date}</h4>
-            <div className="row">
-              <button type="button" onClick={previousClickHandler} className="btn btn-primary" >Previous</button>
-              <button type="button" onClick={nextClickHandler} className="btn btn-primary">Next</button>
-              <button type="button" onClick={todayClickHandler} className="btn btn-success">Today</button>
+            <div className="row m-1">
+              <button type="button" onClick={previousClickHandler} className="btn btn-primary mx-1" >Previous</button>
+              <button type="button" onClick={nextClickHandler} className="btn btn-primary mx-1">Next</button>
+              <button type="button" onClick={todayClickHandler} className="btn btn-success mx-1">Today</button>
             </div>
             <ReservationList reservations={reservations}/>
           </div>

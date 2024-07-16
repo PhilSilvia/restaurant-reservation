@@ -1,6 +1,6 @@
 import React from "react";
 
-function ReservationDetails({ first_name, last_name, mobile_number, reservation_date, reservation_time, people }){
+function ReservationDetails({ first_name, last_name, mobile_number, reservation_date, reservation_time, people, seatButton = null }){
     return (
         <div className="card my-2">
             <div className="card-header">
@@ -17,6 +17,7 @@ function ReservationDetails({ first_name, last_name, mobile_number, reservation_
                     Time: {reservation_time}<br />
                     Party Size: {people}<br />
                 </p>
+                {seatButton}
             </div>
         </div>      
     );
