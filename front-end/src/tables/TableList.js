@@ -7,6 +7,7 @@ function TableList({ tables = [] }){
             .map((table) => (
                 <TableDisplay 
                     table={table}
+                    key={table.table_id}
                 />
             ));
         
