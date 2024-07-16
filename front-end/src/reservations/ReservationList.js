@@ -19,16 +19,10 @@ function ReservationList({ reservations = []}){
                     >Seat</button>
                 )
                 return (
-                <div>
+                <div key={reservation.reservation_id}>
                     <ReservationDetails 
-                        first_name={reservation.first_name}
-                        last_name={reservation.last_name}
-                        mobile_number={reservation.mobile_number}
-                        reservation_date={reservation.reservation_date}
-                        reservation_time={reservation.reservation_time}
-                        people={reservation.people}
+                        reservation={reservation}
                         seatButton={seatButton}
-                        key={reservation.reservation_id}
                     />
                 </div>
             )});

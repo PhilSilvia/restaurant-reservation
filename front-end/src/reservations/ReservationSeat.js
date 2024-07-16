@@ -29,12 +29,7 @@ function ReservationSeat(){
                 <div className="my-4 by-2">
                     <h1>Reservation Details</h1>
                     <ReservationDetails 
-                        first_name={reservation.first_name}
-                        last_name={reservation.last_name}
-                        mobile_number={reservation.mobile_number}
-                        reservation_date={reservation.reservation_date}
-                        reservation_time={reservation.reservation_time}
-                        people={reservation.people}
+                        reservation={reservation}
                     />
                 </div>
             </div>

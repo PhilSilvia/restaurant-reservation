@@ -5,10 +5,9 @@ function TableList({ tables = [] }){
     if (tables.length){
         const list = tables
             .map((table) => (
-                <TableDisplay 
-                    table={table}
-                    key={table.table_id}
-                />
+                <div key={table.table_id}>
+                    <TableDisplay table={table} />
+                </div>
             ));
         
         return (

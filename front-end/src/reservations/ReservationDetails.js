@@ -1,21 +1,21 @@
 import React from "react";
 
-function ReservationDetails({ first_name, last_name, mobile_number, reservation_date, reservation_time, people, seatButton = null }){
+function ReservationDetails({ reservation, seatButton = null }){
     return (
         <div className="card my-2">
             <div className="card-header">
                 <h5 className="card-title">
-                    {first_name} {last_name}
+                    {reservation.first_name} {reservation.last_name}
                 </h5>
                 <h6 className="card-subtitle">
-                    {mobile_number}
+                    {reservation.mobile_number}
                 </h6>
             </div>
             <div className="card-body">
                 <p className="card-text">
-                    Date: {reservation_date}<br />
-                    Time: {reservation_time}<br />
-                    Party Size: {people}<br />
+                    Date: {reservation.reservation_date}<br />
+                    Time: {reservation.reservation_time}<br />
+                    Party Size: {reservation.people}<br />
                 </p>
                 {seatButton}
             </div>
