@@ -136,7 +136,7 @@ const { table } = res.locals;
   }
   next({
     status: 400,
-    message: `Table is already free.`,
+    message: `Table is not occupied.`,
   });
 }
 
