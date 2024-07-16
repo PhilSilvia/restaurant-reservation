@@ -141,6 +141,22 @@ export async function seatTable(updatedTable, signal){
 }
 
 /**
+   * Clears an existing table
+   */
+export async function clearTable(table, signal){
+  const url = new URL(`${API_BASE_URL}/tables/${table.table_id}/seat`);
+  const body = JSON.stringify({ data: table });
+  return await fetchJson(url,
+    {
+      method: "DELETE",
+      headers,
+      body,
+      signal,
+    },
+  );
+}
+
+/**
  * Updates an existing table
  */
 export async function updateTable(updatedTable, signal){
