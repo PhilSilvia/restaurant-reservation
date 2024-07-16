@@ -82,11 +82,12 @@ function read(req, res){
  * Create handler for tables resources
  */
 async function create(req, res){
-  const { data: { table_name, capacity } = {} } = req.body;
+  const { data: { table_name, capacity, reservation_id = null } = {} } = req.body;
   const newTable = {
     table_name,
     capacity,
-    status: "Free",
+    reservation_id,
+    status: reservation_id? "Occupied" : "Free",
   };
   const response = await service.create(newTable);
   res.status(201).json({ data: response });
