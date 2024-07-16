@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { listTables } from '../utils/api';
 import ErrorAlert from '../layout/ErrorAlert';
+import { checkForValidTable } from '../validation/validationChecks';
 
 function ReservationSeatingForm({ reservation }){
-    const [selectedOption, setSelectedOption] = useState('');
+    const [ selectedTable, setSelectedTable ] = useState('');
     const [ tables, setTables ] = useState([]);
     const [ submissionError, setSubmissionError ] = useState(null);
     const [ tablesError, setTablesError ] = useState(null);
@@ -25,20 +26,22 @@ function ReservationSeatingForm({ reservation }){
     // so we can track the change in our state variable
     const handleChange = (event) => {
         const value = event.target.value;
-        console.log(`Selected value: ${event.target.value}`);
-        setSelectedOption(value);
+        setSelectedTable(value);
     };
 
     function handleSubmission(event){
         event.preventDefault();
         setSubmissionError(null);
-        //const error = checkForValidTableData(formData);
-        //setSubmissionError(error)
+        const error = checkForValidTable(selectedTable, tables, reservation);
+        setSubmissionError(error);
+        if (!error){
+            //const abortController = new AbortController();
+            //setSubmissionError(null);
+        }
         // If we have no errors, we proceed with the submission
         //if (!error){
             // Submit the reservation data to the back-end
-            const abortController = new AbortController();
-            setSubmissionError(null);
+            
             // Ensures the 'capacity' value is a number
             /*const data = {...formData, "capacity": Number(formData.capacity)};
             createTable(data, abortController.signal)
@@ -61,18 +64,17 @@ function ReservationSeatingForm({ reservation }){
             <form onSubmit={handleSubmission}>
                 <div className="form-group">
                     <label htmlFor="tableSelector">Choose your table</label>
-                    <select className="form-control" id="tableSelector" value={selectedOption} onChange={handleChange} required>
+                    <select className="form-control" id="tableSelector" value={selectedTable} onChange={handleChange} required>
                         <option value="" disabled>Please select a table</option>
                         {tables.map((table) => {
-                            console.log(`Making option for table id: ${table.table_id}`);
-                            return table.capacity >= reservation.people && table.status === "Free" &&  (
+                            return table.capacity >= reservation.people && table.status === "Free" && (
                                 <option key={table.table_id} value={table.table_id}>
                                     {table.table_name}: Seating for {table.capacity}
                                 </option>
                             )}
                         )}
                     </select>
-                    <p>Selectioned option: {selectedOption}</p>
+                    <p>Selectioned option: {selectedTable}</p>
                 </div>
                 <button type="submit" className="btn btn-primary">Submit</button>
                 <button type="cancel" className="btn btn-danger"onClick={handleCancel}>Cancel</button>
@@ -84,3 +86,5 @@ function ReservationSeatingForm({ reservation }){
 }
 
 export default ReservationSeatingForm;
+
+//

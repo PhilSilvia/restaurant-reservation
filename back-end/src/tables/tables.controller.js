@@ -32,6 +32,22 @@ function capacityIsValid(req, res, next){
 }
 
 /**
+ * Validation middleware function to ensure a specified table exists.
+ */
+async function tableExists(req, res, next){
+  const { tableId } = req.params;
+  const table = await service.read(tableId);
+  if (table && table.length > 0){
+    res.locals.table = table;
+    return next();
+  }
+  next({
+    status: 404,
+    message: `Table id ${tableId} cannot be found`,
+  });
+}
+
+/**
  * List handler for tables resources
  */
 async function list(req, res) {
@@ -39,8 +55,11 @@ async function list(req, res) {
     res.json({ data: data });
   }
 
+/**
+ * Read handler for tables resources
+ */
 function read(req, res){
-  res.json({});
+  res.status(201).json({ data: res.locals.table });
 }
 
 async function create(req, res){
@@ -54,13 +73,24 @@ async function create(req, res){
   res.status(201).json({ data: response });
 }
 
+async function update(req, res){
+
+}
+
 module.exports = {
-    list : asyncErrorBoundary(list),
+    list: asyncErrorBoundary(list),
     read,
     create: [
       bodyDataHas("table_name"),
       bodyDataHas("capacity"),
       capacityIsValid,
       asyncErrorBoundary(create),
+    ],
+    update: [
+      bodyDataHas("table_name"),
+      bodyDataHas("capacity"),
+      capacityIsValid,
+      asyncErrorBoundary(tableExists),
+      asyncErrorBoundary(update),
     ],
 };

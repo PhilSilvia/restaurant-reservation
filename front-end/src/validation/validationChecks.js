@@ -53,6 +53,34 @@ export function checkForValidTableData(data){
 }
 
 /**
+ * Checks to make sure that the selected table is a valid option for the given reservation.
+ * The table is valid if it's status is "Free" and its capacity is equal to or exceeding the
+ *  party size of the reservation, given by its 'people' attritubte. 
+ * @param {int} tableId The id of the selected table
+ * @param {Array} tables The array of loaded tables
+ * @param {object} reservation The reservation being seated
+ * @returns {Error} 
+ * Returns an error if there is anything wrong with the table assignment, otherwise returns null.
+ */
+export function checkForValidTable(tableId, tables, reservation){
+    // Make sure we actually have loaded tables
+    if (!tables)
+        return new Error('No tables are loaded, please try again');
+    // Retrieve our selected table from the list of tables
+    const table = tables.find((table) => Number(table.table_id) === Number(tableId));
+    // Make sure we found the indicated table
+    if (!table)
+        return new Error(`No table with id of ${tableId} found`);
+    // Ensure the table is currently free
+    if (table.status !== "Free")
+        return new Error(`This table is currently unavailable, please choose another talbe.`);
+    // Ensure the table has sufficient seating
+    if (reservation.people > table.capacity)
+        return new Error(`This table has insufficient seating capacity, please choose another table.`);
+    return null;
+}
+
+/**
  * Validation checker to ensure the given data includes all of the fields in a given Map.
  * @param {object} data
  * @param {Map} fieldMap

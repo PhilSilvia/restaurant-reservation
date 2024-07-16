@@ -15,8 +15,13 @@ async function create(newTable){
         .then((createdRecords) => createdRecords[0]);
 }
 
+async function update(table){
+    
+}
+
 module.exports = {
     list,
     read,
     create,
+    update,
 };
