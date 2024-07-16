@@ -1,5 +1,6 @@
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const service = require("./tables.service");
+const reservationService = require("../reservations/reservations.service");
 
 /**
  * Validation helper function for the reservation validation
@@ -93,6 +94,53 @@ async function create(req, res){
 }
 
 /**
+ * Helper function to ensure the capacity is sufficient for the reservation. 
+ */
+function capacityIsSufficient(req, res, next){
+  const { reservation, table } = res.locals;
+  console.log(reservation);
+  console.log(`Comparing capacity of ${table.capacity} to party size of ${reservation.people}`);
+  if (table.capacity >= reservation.people){
+    return next();
+  }
+  next({
+    status: 400,
+    message: `Table capacity is insufficient for a party this size.`,
+  });
+}
+
+/**
+ * Helper function to ensure the table is not currently occupied.
+ */
+function tableNotOccupied(req, res, next){
+  const { table } = res.locals;
+  if (table.status === "Free"){
+    res.locals.status = "Occupied";
+    return next();
+  }
+  next({
+    status: 400,
+    message: `Table is occupied.`,
+  });
+}
+
+/**
+ * Helper function to ensure that the indicated reservation actually exists
+ */
+async function reservationExists(req, res, next){
+  const { reservation_id } = req.body.data;
+  const reservation = await reservationService.read(reservation_id);
+  if (reservation && reservation.length > 0){
+    res.locals.reservation = reservation[0];
+    return next();
+  }
+  next({
+    status: 404,
+    message: `Reservation id ${reservation_id} cannot be found`,
+  });
+}
+
+/**
  * Update handler for tables resources
  */
 async function update(req, res){
@@ -100,10 +148,11 @@ async function update(req, res){
     ...res.locals.table,
     ...req.body.data,
     table_id: res.locals.table.table_id,
+    status: res.locals.status? res.locals.status : res.body.data.status,
   };
   console.log(updatedTable);
   const data = await service.update(updatedTable);
-  res.json({ data });
+  res.status(200).json({ data });
 }
 
 module.exports = {
@@ -118,6 +167,14 @@ module.exports = {
       capacityIsValid,
       tableNameIsValid,
       asyncErrorBoundary(create),
+    ],
+    seat: [
+      bodyDataHas("reservation_id"),
+      asyncErrorBoundary(tableExists),
+      asyncErrorBoundary(reservationExists),
+      capacityIsSufficient,
+      tableNotOccupied,
+      asyncErrorBoundary(update),
     ],
     update: [
       bodyDataHas("table_name"),

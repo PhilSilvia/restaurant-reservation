@@ -16,7 +16,7 @@ router.route("/:tableId")
     .get(controller.read)
     .all(notFound);
 router.route("/:tableId/seat")
-    .put(controller.update)
+    .put(controller.seat)
     .all(notFound);
 
 module.exports = router;

@@ -124,7 +124,7 @@ async function reservationExists(req, res, next){
   const { reservationId } = req.params;
   const reservation = await service.read(reservationId);
   if (reservation && reservation.length > 0){
-    res.locals.reservation = reservation;
+    res.locals.reservation = reservation[0];
     return next();
   }
   next({
@@ -137,7 +137,7 @@ async function reservationExists(req, res, next){
  * Read handler for a specified reservation
  */
 async function read(req, res){
-  res.status(201).json({ data: res.locals.reservation });
+  res.status(200).json({ data: res.locals.reservation });
 }
 
 module.exports = {
