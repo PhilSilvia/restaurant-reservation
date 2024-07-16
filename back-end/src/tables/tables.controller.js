@@ -108,6 +108,7 @@ function capacityIsSufficient(req, res, next){
 
 /**
  * Helper function to ensure the table is not currently occupied.
+ * Assists the table seating methodology.
  */
 function tableNotOccupied(req, res, next){
   const { table } = res.locals;
@@ -118,6 +119,23 @@ function tableNotOccupied(req, res, next){
   next({
     status: 400,
     message: `Table is occupied.`,
+  });
+}
+
+/**
+ * Helper function to ensure the table is currently occupied.
+ * Assists the table clearing methodology.
+ */
+function tableOccupied(req, res, next){
+const { table } = res.locals;
+  if (table.status === "Occupied"){
+    res.locals.status = "Free";
+    res.locals.reservation_id = null;
+    return next();
+  }
+  next({
+    status: 400,
+    message: `Table is already free.`,
   });
 }
 
@@ -145,7 +163,8 @@ async function update(req, res){
     ...res.locals.table,
     ...req.body.data,
     table_id: res.locals.table.table_id,
-    status: res.locals.status? res.locals.status : res.body.data.status,
+    status: res.locals.status? res.locals.status : req.body.data.status,
+    reservation_id: res.locals.status === "Free" ? null : req.body.data.reservation_id,
   };
   const data = await service.update(updatedTable);
   res.status(200).json({ data });
@@ -178,6 +197,11 @@ module.exports = {
       tableNameIsValid,
       capacityIsValid,
       asyncErrorBoundary(tableExists),
+      asyncErrorBoundary(update),
+    ],
+    clear: [
+      asyncErrorBoundary(tableExists),
+      tableOccupied,
       asyncErrorBoundary(update),
     ],
 };

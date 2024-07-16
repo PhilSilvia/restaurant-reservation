@@ -17,6 +17,7 @@ router.route("/:tableId")
     .all(notFound);
 router.route("/:tableId/seat")
     .put(controller.seat)
+    .delete(controller.clear)
     .all(notFound);
 
 module.exports = router;
