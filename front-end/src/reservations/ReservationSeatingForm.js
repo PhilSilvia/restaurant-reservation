@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
-import { listTables, seatTable } from '../utils/api';
+import { listTables, seatTable, updateReservationStatus } from '../utils/api';
 import ErrorAlert from '../layout/ErrorAlert';
 import { checkForValidTable } from '../validation/validationChecks';
 
@@ -51,7 +51,9 @@ function ReservationSeatingForm({ reservation }){
             };
             seatTable(data, abortController.signal)
                 .then(() => {
-                    navigate("/");
+                    updateReservationStatus(reservation.reservation_id, "seated", abortController.signal)
+                        .then(() => navigate("/"))
+                        .catch(setSubmissionError);
                 })
                 .catch((error) => {
                     setSubmissionError(error)

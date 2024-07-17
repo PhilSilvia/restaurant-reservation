@@ -1,5 +1,5 @@
 import React from "react";
-import { clearTable } from "../utils/api";
+import { clearTable, updateReservationStatus } from "../utils/api";
 
 function TableDisplay({ table }){
 
@@ -7,8 +7,10 @@ function TableDisplay({ table }){
         event.preventDefault();
         if (window.confirm("Is this table ready to seat new guests? This cannot be undone.")){
             const abortController = new AbortController();
-            clearTable(table, abortController.signal)
-                .then(() => window.location.reload())
+            updateReservationStatus(table.reservation_id, "finished", abortController.signal)
+                .then(() => clearTable(table, abortController.signal)
+                    .then(() => window.location.reload())
+                    .catch((error) => console.error(error)))
                 .catch((error) => console.error(error));
         }
     }
