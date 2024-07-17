@@ -18,7 +18,7 @@ function ReservationList({ reservations = []}){
                         }}
                     >Seat</button>
                 )
-                return (
+                return reservation.status !== "finished" && (
                 <div key={reservation.reservation_id}>
                     <ReservationDetails 
                         reservation={reservation}
