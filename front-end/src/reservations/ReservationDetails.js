@@ -20,7 +20,7 @@ function ReservationDetails({ reservation, seatButton = null }){
                 <p className="card-text" data-reservation-id-status={reservation.reservation_id}>
                     Status: {reservation.status}<br />
                 </p>
-                {status === "booked" && seatButton}
+                {reservation.status === "booked" && seatButton}
             </div>
         </div>      
     );

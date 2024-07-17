@@ -157,6 +157,22 @@ export async function clearTable(table, signal){
 }
 
 /**
+ * Seats an existing reservation
+ */
+export async function updateReservationStatus(reservation_id, status, signal){
+  const url = new URL(`${API_BASE_URL}/reservations/${reservation_id}/status`);
+  const body = JSON.stringify({ data: { status } });
+  return await fetchJson(url,
+    {
+      method: "PUT",
+      headers,
+      body,
+      signal,
+    },
+  );
+}
+
+/**
  * Updates an existing table
  */
 export async function updateTable(updatedTable, signal){
