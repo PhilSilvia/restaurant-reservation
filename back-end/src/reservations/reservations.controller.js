@@ -32,6 +32,18 @@ function bodyDataHas(propertyName){
   };
 }
 
+function statusIs(validStatuses){
+  return function (req, res, next){
+    const { data: { status } = {} } = req.body;
+    if (validStatuses.includes(status))
+      return next();
+    next({
+      status: 400,
+      message: `Status must be one of ${validStatuses}. Received ${status}`,
+    });
+  };
+}
+
 /**
  * Validation helper function for the people parameter in a new or updated reservation.
  * Ensures that the people parameter is greater than 0. 
@@ -157,6 +169,16 @@ function statusIsValid(req, res, next){
   });
 }
 
+function reservationStatusIsNotFinished(req, res, next){
+  const status = res.locals.reservation.status;
+  if (status !== "finished")
+    return next();
+  next({
+    status: 400,
+    message: `A finished reservation cannot be updated.`,
+  });
+}
+
 /**
  * Update handler for a specified reservation
  */
@@ -180,6 +202,7 @@ module.exports = {
     bodyDataHas("reservation_time"),
     bodyDataHas("people"),
     peopleIsValid, 
+    statusIs(["booked"]),
     reservationDateIsValid,
     reservationTimeIsValid,
     asyncErrorBoundary(create)
@@ -195,16 +218,18 @@ module.exports = {
     bodyDataHas("reservation_date"),
     bodyDataHas("reservation_time"),
     bodyDataHas("people"),
-    peopleIsValid, 
+    peopleIsValid,
     reservationDateIsValid,
     reservationTimeIsValid,
     asyncErrorBoundary(reservationExists),
+    reservationStatusIsNotFinished,
     asyncErrorBoundary(update),
   ],
   statusUpdate: [
     bodyDataHas("status"),
-    statusIsValid,
+    statusIs(["booked", "seated", "finished"]), 
     asyncErrorBoundary(reservationExists),
+    reservationStatusIsNotFinished,
     asyncErrorBoundary(update),
   ],
 };

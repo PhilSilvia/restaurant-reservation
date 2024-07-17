@@ -165,6 +165,9 @@ export async function clearTable(table_id, signal){
     },
   );
 }
+/*export async function clearTable(table_id, reservation_id, signal){
+  const url = new URL(`${API_BASE_URL}/reservations/${reservation_id}/status`);
+}*/
 
 /**
  * Seats an existing reservation
