@@ -114,7 +114,6 @@ function capacityIsSufficient(req, res, next){
 function tableNotOccupied(req, res, next){
   const { table } = res.locals;
   if (table.status === "Free"){
-    res.locals.status = "Occupied";
     return next();
   }
   next({
@@ -130,8 +129,6 @@ function tableNotOccupied(req, res, next){
 function tableOccupied(req, res, next){
 const { table } = res.locals;
   if (table.status === "Occupied"){
-    res.locals.status = "Free";
-    res.locals.reservation_id = null;
     return next();
   }
   next({
@@ -164,8 +161,6 @@ async function update(req, res){
     ...res.locals.table,
     ...req.body.data,
     table_id: res.locals.table.table_id,
-    status: res.locals.status? res.locals.status : req.body.data.status,
-    reservation_id: res.locals.status === "Free" ? null : req.body.data.reservation_id,
   };
   const data = await service.update(updatedTable);
   res.status(200).json({ data });

@@ -127,9 +127,14 @@ export async function createTable(table, signal){
 /**
  * Seats a table
  */
-export async function seatTable(updatedTable, signal){
-  const url = new URL(`${API_BASE_URL}/tables/${updatedTable.table_id}/seat`);
-  const body = JSON.stringify({ data: updatedTable });
+export async function seatTable(table_id, reservation_id, signal){
+  const url = new URL(`${API_BASE_URL}/tables/${table_id}/seat`);
+  const body = JSON.stringify({ 
+    data: { 
+      status: "Occupied",
+      reservation_id,
+    } 
+  });
   return await fetchJson(url, 
     {
       method: "PUT",
@@ -143,9 +148,14 @@ export async function seatTable(updatedTable, signal){
 /**
    * Clears an existing table
    */
-export async function clearTable(table, signal){
-  const url = new URL(`${API_BASE_URL}/tables/${table.table_id}/seat`);
-  const body = JSON.stringify({ data: table });
+export async function clearTable(table_id, signal){
+  const url = new URL(`${API_BASE_URL}/tables/${table_id}/seat`);
+  const body = JSON.stringify({ 
+    data: {
+      status: "Free",
+      reservation_id: null,
+    }
+  });
   return await fetchJson(url,
     {
       method: "DELETE",

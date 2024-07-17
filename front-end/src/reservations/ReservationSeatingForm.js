@@ -41,18 +41,9 @@ function ReservationSeatingForm({ reservation }){
         if (!error){
             const abortController = new AbortController();
             setSubmissionError(null);
-            // Build the body of our request from the selected table's data
-            const tableData = tables.find((table) => Number(selectedTable) === Number(table.table_id));
             // Change the status of the table and assign it to the reservation's id
-            const data = {
-                ...tableData,
-                status: "Occupied",
-                reservation_id: reservation.reservation_id,
-            };
-            console.log(`Sending api request to seat table ${tableData.table_id}`);
-            seatTable(data, abortController.signal)
+            seatTable(selectedTable, reservation.reservation_id, abortController.signal)
                 .then(() => {
-                    console.log(`API request successful. Sending request to update the reservation status.`);
                     updateReservationStatus(reservation.reservation_id, "seated", abortController.signal)
                         .then(() => navigate("/"))
                         .catch(setSubmissionError);

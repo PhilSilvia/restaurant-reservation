@@ -8,7 +8,7 @@ function TableDisplay({ table }){
         if (window.confirm("Is this table ready to seat new guests? This cannot be undone.")){
             const abortController = new AbortController();
             updateReservationStatus(table.reservation_id, "finished", abortController.signal)
-                .then(() => clearTable(table, abortController.signal)
+                .then(() => clearTable(table.table_id, abortController.signal)
                     .then(() => window.location.reload())
                     .catch((error) => console.error(error)))
                 .catch((error) => console.error(error));
