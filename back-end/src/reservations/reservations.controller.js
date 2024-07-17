@@ -141,6 +141,35 @@ async function read(req, res){
   res.status(200).json({ data: res.locals.reservation });
 }
 
+/**
+ * Validation middleware function to ensure a given status valid. 
+ * Status is valid if it is either "booked", "seated", or "finished".
+ */
+function statusIsValid(req, res, next){
+  const { data: { status } = {} } = req.body;
+  const validStatus = ["booked", "seated", "finished"];
+  if (validStatus.includes(status)){
+    return next();
+  }
+  next({
+    status: 400,
+    message: `Status must be either 'booked', 'seated', or 'finished'. Received ${status}`,
+  });
+}
+
+/**
+ * Update handler for a specified reservation
+ */
+async function update(req, res){
+  const updatedReservation = {
+    ...res.locals.reservation,
+    ...req.body.data,
+    reservation_id: res.locals.reservation.reservation_id,
+  };
+  const data = await service.update(updatedReservation);
+  res.status(200).json({ data });
+}
+
 module.exports = {
   list: asyncErrorBoundary(list),
   create: [
@@ -158,5 +187,24 @@ module.exports = {
   read: [
     asyncErrorBoundary(reservationExists),
     read,
-  ]
+  ],
+  update: [
+    bodyDataHas("first_name"),
+    bodyDataHas("last_name"),
+    bodyDataHas("mobile_number"),
+    bodyDataHas("reservation_date"),
+    bodyDataHas("reservation_time"),
+    bodyDataHas("people"),
+    peopleIsValid, 
+    reservationDateIsValid,
+    reservationTimeIsValid,
+    asyncErrorBoundary(reservationExists),
+    asyncErrorBoundary(update),
+  ],
+  statusUpdate: [
+    bodyDataHas("status"),
+    statusIsValid,
+    asyncErrorBoundary(reservationExists),
+    asyncErrorBoundary(update),
+  ],
 };

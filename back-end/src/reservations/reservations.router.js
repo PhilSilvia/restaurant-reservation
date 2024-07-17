@@ -10,5 +10,6 @@ const notFound = require("../errors/notFound");
 
 router.route("/").get(controller.list).post(controller.create).all(notFound);
 router.route("/:reservationId").get(controller.read).all(notFound);
+router.route("/:reservationId/status").put(controller.statusUpdate).all(notFound);
 
 module.exports = router;

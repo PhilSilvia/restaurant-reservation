@@ -162,6 +162,7 @@ export async function clearTable(table, signal){
 export async function updateReservationStatus(reservation_id, status, signal){
   const url = new URL(`${API_BASE_URL}/reservations/${reservation_id}/status`);
   const body = JSON.stringify({ data: { status } });
+  console.log(`Sending put request to ${url} with ${body}`)
   return await fetchJson(url,
     {
       method: "PUT",

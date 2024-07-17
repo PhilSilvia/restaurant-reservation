@@ -24,9 +24,18 @@ async function create(reservation){
         .then((createdRecords) => createdRecords[0]);
 }
 
+async function update(updatedReservation){
+    return knex("reservations")
+        .select("*")
+        .where({ "reservation_id": updatedReservation.reservation_id })
+        .update(updatedReservation, "*")
+        .then((updated) => updated[0]);
+}
+
 module.exports = {
     list,
     readDate,
     read,
     create,
+    update,
 };
