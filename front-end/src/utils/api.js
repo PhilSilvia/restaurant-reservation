@@ -181,3 +181,17 @@ export async function updateTable(updatedTable, signal){
     },
   );
 }
+
+/**
+ * Searches for reservations with the matching mobile phone number
+ */
+export async function searchReservationByMobileNumber(mobile_number, signal){
+  const url = new URL(`${API_BASE_URL}/reservations?mobile_number=${mobile_number}`);
+  return await fetchJson(url, 
+    {
+      method: "GET",
+      headers,
+      signal,
+    },
+  );
+}

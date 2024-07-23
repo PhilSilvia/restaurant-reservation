@@ -1,13 +1,20 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import ErrorAlert from "../layout/ErrorAlert";
+import { searchReservationByMobileNumber } from "../utils/api";
 
-function SearchByMobileNumberForm(){
+function SearchByMobileNumberForm({ reservations, setReservations }){
     const [ mobileNumber, setMobileNumber ] = useState("");
     const [ submissionError, setSubmissionError ] = useState(null);
 
+    // Submission handler for the Search form
     function handleSumbission(event){
         event.preventDefault();
+        setSubmissionError(null);
+        const abortController = new AbortController();
+        searchReservationByMobileNumber(mobileNumber, abortController.signal)
+            .then(setReservations)
+            //.then(() => window.location.reload())
+            .catch(setSubmissionError);
     }
 
     // Event handler for when the form's values are changed, 
