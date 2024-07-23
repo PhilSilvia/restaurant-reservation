@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
-import { listTables, seatTable, updateReservationStatus } from '../utils/api';
+import { listTables, seatReservation, seatTable, updateReservationStatus } from '../utils/api';
 import ErrorAlert from '../layout/ErrorAlert';
 import { checkForValidTable } from '../validation/validationChecks';
 
@@ -42,15 +42,9 @@ function ReservationSeatingForm({ reservation }){
             const abortController = new AbortController();
             setSubmissionError(null);
             // Change the status of the table and assign it to the reservation's id
-            seatTable(selectedTable, reservation.reservation_id, abortController.signal)
-                .then(() => {
-                    updateReservationStatus(reservation.reservation_id, "seated", abortController.signal)
-                        .then(() => navigate("/"))
-                        .catch(setSubmissionError);
-                })
-                .catch((error) => {
-                    setSubmissionError(error)
-                });
+            seatReservation(reservation.reservation_id, selectedTable, abortController.signal)
+                .then(() => navigate("/"))
+                .catch(setSubmissionError);
         }
     }
 

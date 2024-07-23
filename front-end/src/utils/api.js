@@ -68,6 +68,9 @@ export async function listReservations(params, signal) {
     .then(formatReservationTime);
 }
 
+/**
+ * Returns a list of all tables
+ */
 export async function listTables(params, signal){
   const url = new URL(`${API_BASE_URL}/tables`);
   Object.entries(params).forEach(([key, value]) =>
@@ -76,6 +79,9 @@ export async function listTables(params, signal){
   return await fetchJson(url, { headers, signal }, []);
 }
 
+/**
+ * Returns a specified reservation and its details
+ */
 export async function readReservation(params, signal){
   const { reservationId } = params;
   const url = new URL(`${API_BASE_URL}/reservations/${reservationId}`);
@@ -125,35 +131,13 @@ export async function createTable(table, signal){
 }
 
 /**
- * Seats a table
- */
-export async function seatTable(table_id, reservation_id, signal){
-  const url = new URL(`${API_BASE_URL}/tables/${table_id}/seat`);
-  const body = JSON.stringify({ 
-    data: { 
-      status: "Occupied",
-      reservation_id,
-    } 
-  });
-  return await fetchJson(url, 
-    {
-      method: "PUT",
-      headers,
-      body,
-      signal,
-    },
-  );
-}
-
-/**
    * Clears an existing table
    */
-export async function clearTable(table_id, signal){
+export async function clearTable(table_id, reservation_id, signal){
   const url = new URL(`${API_BASE_URL}/tables/${table_id}/seat`);
   const body = JSON.stringify({ 
     data: {
-      status: "Free",
-      reservation_id: null,
+      reservation_id,
     }
   });
   return await fetchJson(url,
@@ -165,17 +149,13 @@ export async function clearTable(table_id, signal){
     },
   );
 }
-/*export async function clearTable(table_id, reservation_id, signal){
-  const url = new URL(`${API_BASE_URL}/reservations/${reservation_id}/status`);
-}*/
 
 /**
- * Seats an existing reservation
+ * Seats a reservation
  */
-export async function updateReservationStatus(reservation_id, status, signal){
-  const url = new URL(`${API_BASE_URL}/reservations/${reservation_id}/status`);
-  const body = JSON.stringify({ data: { status } });
-  console.log(`Sending put request to ${url} with ${body}`)
+export async function seatReservation(reservation_id, table_id, signal){
+  const url = new URL(`${API_BASE_URL}/tables/${table_id}/seat`);
+  const body = JSON.stringify({ data: { reservation_id } });
   return await fetchJson(url,
     {
       method: "PUT",

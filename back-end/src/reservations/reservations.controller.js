@@ -34,7 +34,7 @@ function bodyDataHas(propertyName){
 
 function statusIs(validStatuses){
   return function (req, res, next){
-    const { data: { status } = {} } = req.body;
+    const { data: { status = "booked" } = {} } = req.body;
     if (validStatuses.includes(status))
       return next();
     next({

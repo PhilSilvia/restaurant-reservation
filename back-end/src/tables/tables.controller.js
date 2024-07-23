@@ -154,6 +154,44 @@ async function reservationExists(req, res, next){
 }
 
 /**
+ * Seat handler for tables resources
+ */
+async function seat(req, res){
+  const updatedTable = {
+    ...res.locals.table,
+    ...req.body.data,
+    status: "Occupied",
+    table_id: res.locals.table.table_id,
+  };
+  const updatedReservation = {
+    ...res.locals.reservation,
+    status: "seated",
+    reservation_id: res.locals.reservation.reservation_id,
+  };
+  const data = await service.updateTableAndReservation(updatedTable, updatedReservation);
+  res.status(200).json({ data });
+}
+
+/**
+ * Clear handler for tables resources
+ */
+async function clear(req, res){
+  const updatedTable = {
+    ...res.locals.table,
+    ...req.body.data,
+    status: "Free",
+    table_id: res.locals.table.table_id,
+  };
+  const updatedReservation = {
+    ...res.locals.reservation,
+    status: "finished",
+    reservation_id: res.locals.reservation.reservation_id,
+  };
+  const data = await service.updateTableAndReservation(updatedTable, updatedReservation);
+  res.status(200).json({ data });
+}
+
+/**
  * Update handler for tables resources
  */
 async function update(req, res){
@@ -185,7 +223,7 @@ module.exports = {
       asyncErrorBoundary(reservationExists),
       capacityIsSufficient,
       tableNotOccupied,
-      asyncErrorBoundary(update),
+      asyncErrorBoundary(seat),
     ],
     update: [
       bodyDataHas("table_name"),
@@ -197,7 +235,8 @@ module.exports = {
     ],
     clear: [
       asyncErrorBoundary(tableExists),
+      asyncErrorBoundary(reservationExists),
       tableOccupied,
-      asyncErrorBoundary(update),
+      asyncErrorBoundary(clear),
     ],
 };
