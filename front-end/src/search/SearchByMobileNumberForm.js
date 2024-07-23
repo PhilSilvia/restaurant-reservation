@@ -5,6 +5,7 @@ import { searchReservationByMobileNumber } from "../utils/api";
 function SearchByMobileNumberForm({ reservations, setReservations }){
     const [ mobileNumber, setMobileNumber ] = useState("");
     const [ submissionError, setSubmissionError ] = useState(null);
+    const [ noReservations, setNoReservations ] = useState(null);
 
     // Submission handler for the Search form
     function handleSumbission(event){
@@ -13,8 +14,10 @@ function SearchByMobileNumberForm({ reservations, setReservations }){
         const abortController = new AbortController();
         searchReservationByMobileNumber(mobileNumber, abortController.signal)
             .then(setReservations)
-            //.then(() => window.location.reload())
             .catch(setSubmissionError);
+        if (reservations.length === 0){
+            setNoReservations(<h5>No reservations found.</h5>);
+        }
     }
 
     // Event handler for when the form's values are changed, 
@@ -43,6 +46,7 @@ function SearchByMobileNumberForm({ reservations, setReservations }){
                     <button type="submit" className="btn btn-primary">Find</button>
                 </div>
             </form>
+            {reservations.length === 0 && noReservations}
             <ErrorAlert error={submissionError} />
         </div>
     );

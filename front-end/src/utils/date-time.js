@@ -105,8 +105,12 @@ export function convertToDate(myDate){
 export function compareDates(date1, date2){
   if (date1.getYear() < date2.getYear())
       return -1;
+  if (date1.getYear() > date2.getYear())
+      return 1;
   if (date1.getMonth() < date2.getMonth())
       return -1;
+  if (date1.getMonth() > date2.getMonth())
+      return 1;
   return date1.getDate() - date2.getDate();
 }
 

@@ -9,11 +9,13 @@ function Search(){
         <main>
             <h1>Search for a Reservation</h1>
             <div className="d-md-flex mb-3">
-                <SearchByMobileNumberForm 
-                    reservations={reservations} 
-                    setReservations={setReservations}
-                />
-                <ReservationList reservations={reservations} />
+                <div className="col">
+                    <SearchByMobileNumberForm 
+                        reservations={reservations} 
+                        setReservations={setReservations}
+                    />
+                    <ReservationList reservations={reservations} />
+                </div>
             </div>
         </main>
     );
