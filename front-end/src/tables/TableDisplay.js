@@ -1,5 +1,5 @@
 import React from "react";
-import { clearTable, updateReservationStatus } from "../utils/api";
+import { clearTable } from "../utils/api";
 
 function TableDisplay({ table }){
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
-import { listTables, seatReservation, seatTable, updateReservationStatus } from '../utils/api';
+import { listTables, seatReservation } from '../utils/api';
 import ErrorAlert from '../layout/ErrorAlert';
 import { checkForValidTable } from '../validation/validationChecks';
 
