@@ -153,22 +153,6 @@ async function read(req, res){
   res.status(200).json({ data: res.locals.reservation });
 }
 
-/**
- * Validation middleware function to ensure a given status valid. 
- * Status is valid if it is either "booked", "seated", or "finished".
- */
-function statusIsValid(req, res, next){
-  const { data: { status } = {} } = req.body;
-  const validStatus = ["booked", "seated", "finished"];
-  if (validStatus.includes(status)){
-    return next();
-  }
-  next({
-    status: 400,
-    message: `Status must be either 'booked', 'seated', or 'finished'. Received ${status}`,
-  });
-}
-
 function reservationStatusIsNotFinished(req, res, next){
   const status = res.locals.reservation.status;
   if (status !== "finished")

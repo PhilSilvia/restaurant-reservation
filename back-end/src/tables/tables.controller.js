@@ -154,6 +154,21 @@ async function reservationExists(req, res, next){
 }
 
 /**
+ * Helper function that ensures the reservation's status is a particular status
+ */
+function reservationStatusIs(validStatuses){
+  return function (req, res, next){
+    const status = res.locals.reservation.status;
+    if (validStatuses.includes(status))
+      return next();
+    next({
+      status: 400,
+      message: `Status must be one of ${validStatuses}. Received ${status}`,
+    });
+  };
+}
+
+/**
  * Seat handler for tables resources
  */
 async function seat(req, res){
@@ -223,6 +238,7 @@ module.exports = {
       asyncErrorBoundary(reservationExists),
       capacityIsSufficient,
       tableNotOccupied,
+      reservationStatusIs(["booked"]),
       asyncErrorBoundary(seat),
     ],
     update: [
