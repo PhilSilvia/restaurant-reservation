@@ -14,6 +14,15 @@ async function readDate(date){
         .orderBy('reservation_time');
 }
 
+async function searchMobileNumber(mobile_number){
+    return knex("reservations")
+        .whereRaw(
+            "translate(mobile_number, '() -', '') like ?",
+            `%${mobile_number.replace(/\D/g, "")}%`
+        )
+        .orderBy("reservation_date");
+}
+
 async function read(reservationId){
     return knex("reservations")
         .select("*")
@@ -38,6 +47,7 @@ async function update(updatedReservation){
 module.exports = {
     list,
     readDate,
+    searchMobileNumber,
     read,
     create,
     update,

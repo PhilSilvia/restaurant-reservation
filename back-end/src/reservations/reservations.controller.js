@@ -7,10 +7,12 @@ const timeIsValid = require("../utils/timeIsValid");
  * List handler for reservation resources
  */
 async function list(req, res) {
-  const { date } = req.query;
+  const { date, mobile_number } = req.query;
   let data = {};
   if (date){
     data = await service.readDate(date);
+  } else if (mobile_number) {
+    data = await service.searchMobileNumber(mobile_number);
   } else {
     data = await service.list();
   }
