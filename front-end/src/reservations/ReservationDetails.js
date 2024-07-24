@@ -41,7 +41,7 @@ function ReservationDetails({ reservation, seatButton = null }){
                 </p>
                 {reservation.status === "booked" && <button onClick={editHandler} href={`/reservations/${reservation.reservation_id}/edit`} className="btn btn-secondary mx-1">Edit</button>}
                 {reservation.status === "booked" && seatButton}
-                <button onClick={cancelHandler} data-reservation-id-cancel={reservation.reservation_id} className="btn btn-danger mx-1">Cancel</button>
+                {(reservation.status === "booked" || reservation.status === "seated") && <button onClick={cancelHandler} data-reservation-id-cancel={reservation.reservation_id} className="btn btn-danger mx-1">Cancel</button>}
             </div>
         </div>      
     );

@@ -213,7 +213,7 @@ module.exports = {
   ],
   statusUpdate: [
     bodyDataHas("status"),
-    statusIs(["booked", "seated", "finished"]), 
+    statusIs(["booked", "seated", "finished", "cancelled"]), 
     asyncErrorBoundary(reservationExists),
     reservationStatusIsNotFinished,
     asyncErrorBoundary(update),
