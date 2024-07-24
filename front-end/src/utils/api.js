@@ -195,3 +195,19 @@ export async function searchReservationByMobileNumber(mobile_number, signal){
     },
   );
 }
+
+/**
+ * Sets a reservation's status to "cancelled"
+ */
+export async function cancelReservation(reservation_id, signal){
+  const url = new URL(`${API_BASE_URL}/reservations/${reservation_id}/status`);
+  const body = JSON.stringify({ data: { status: "cancelled" } });
+  return await fetchJson(url,
+    {
+      body,
+      method: "PUT",
+      headers,
+      signal,
+    },
+  );
+}

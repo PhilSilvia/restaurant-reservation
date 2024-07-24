@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router";
+import { cancelReservation } from "../utils/api";
 
 function ReservationDetails({ reservation, seatButton = null }){
     const navigate = useNavigate();
@@ -7,6 +8,16 @@ function ReservationDetails({ reservation, seatButton = null }){
     const editHandler = (event) => {
         event.preventDefault();
         navigate(`/reservations/${reservation.reservation_id}/edit`);
+    }
+
+    const cancelHandler = (event) => {
+        event.preventDefault();
+        if (window.confirm("Do you want to cancel this reservation? This cannot be undone.")){
+            const abortController = new AbortController();
+            cancelReservation(reservation.reservation_id, abortController.signal)
+                .then(() => window.location.reload())
+                .catch((error) => console.error(error));
+        }
     }
 
     return (
@@ -28,8 +39,9 @@ function ReservationDetails({ reservation, seatButton = null }){
                 <p className="card-text" data-reservation-id-status={reservation.reservation_id}>
                     Status: {reservation.status}<br />
                 </p>
-                <button onClick={editHandler} href={`/reservations/${reservation.reservation_id}/edit`} className="btn btn-secondary mx-1">Edit</button>
+                {reservation.status === "booked" && <button onClick={editHandler} href={`/reservations/${reservation.reservation_id}/edit`} className="btn btn-secondary mx-1">Edit</button>}
                 {reservation.status === "booked" && seatButton}
+                <button onClick={cancelHandler} data-reservation-id-cancel={reservation.reservation_id} className="btn btn-danger mx-1">Cancel</button>
             </div>
         </div>      
     );
