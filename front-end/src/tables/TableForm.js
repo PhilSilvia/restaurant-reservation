@@ -4,7 +4,12 @@ import { createTable } from "../utils/api";
 import { checkForValidTableData } from "../validation/validationChecks";
 import ErrorAlert from "../layout/ErrorAlert";
 
+/**
+ * Defines the JSX for the form used to create new tables in the system
+ * @returns JSX for the element
+ */
 function TableForm(){
+    // State variables to track the form data and any submission errors
     const [formData, setFormData] = useState({
         table_name: "",
         capacity: "",
@@ -20,18 +25,20 @@ function TableForm(){
         setFormData({ ...formData, [target.name]: value });
     };
 
+    // Submission handler
     function handleSubmission(event){
         event.preventDefault();
         setSubmissionError(null);
+        // Check for valid table data and show an error if something is off
         const error = checkForValidTableData(formData);
         setSubmissionError(error)
         // If we have no errors, we proceed with the submission
         if (!error){
-            // Submit the reservation data to the back-end
             const abortController = new AbortController();
             setSubmissionError(null);
             // Ensures the 'capacity' value is a number
             const data = {...formData, "capacity": Number(formData.capacity)};
+            // Submit the reservation data to the back-end
             createTable(data, abortController.signal)
                 .then(() => {
                     navigate("/")
@@ -42,11 +49,14 @@ function TableForm(){
         }
     }
 
+    // Event handler for the cancel button
     function handleCancel(event){
         event.preventDefault();
+        // Navigate back one page
         navigate(-1);
     }
 
+    // Returns the JSX for the element, which is mostly a form
     return (
         <div className="col">
             <form onSubmit={handleSubmission}>
