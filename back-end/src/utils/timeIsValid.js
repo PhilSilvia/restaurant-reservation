@@ -40,14 +40,12 @@ function timeIsValid(time, isToday = false) {
             const today = new Date();
             const hoursNow = Number(today.getHours());
             const minutesNow = Number(today.getMinutes());
-            
-            console.log(`Comparing ${hoursNow}:${minutesNow} to ${hour}:${minutes}`)
 
             // Check to ensure the time is in the future
             if (hour < hoursNow)
-                return `reservation_time must be a time in the future. Received ${time}`;
+                return `reservation_time must be a time in the future. Received ${time}, current time is ${hoursNow}:${minutesNow}`;
             if (hour === hoursNow && minutes < minutesNow)
-                return `reservation_time must be a time in the future. Received ${time}`;
+                return `reservation_time must be a time in the future. Received ${time}, current time is ${hoursNow}:${minutesNow}`;
         }
         return null;
     }
