@@ -1,6 +1,14 @@
 import React from "react";
+import { useNavigate } from "react-router";
 
 function ReservationDetails({ reservation, seatButton = null }){
+    const navigate = useNavigate();
+
+    const editHandler = (event) => {
+        event.preventDefault();
+        navigate(`/reservations/${reservation.reservation_id}/edit`);
+    }
+
     return (
         <div className="card my-2">
             <div className="card-header">
@@ -20,6 +28,7 @@ function ReservationDetails({ reservation, seatButton = null }){
                 <p className="card-text" data-reservation-id-status={reservation.reservation_id}>
                     Status: {reservation.status}<br />
                 </p>
+                <button onClick={editHandler} href={`/reservations/${reservation.reservation_id}/edit`} className="btn btn-secondary mx-1">Edit</button>
                 {reservation.status === "booked" && seatButton}
             </div>
         </div>      

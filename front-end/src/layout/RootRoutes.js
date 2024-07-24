@@ -5,6 +5,7 @@ import Dashboard from "../dashboard/Dashboard";
 import NotFound from "./NotFound";
 import ReservationNew from "../reservations/ReservationNew";
 import ReservationSeat from "../reservations/ReservationSeat";
+import ReservationEdit from "../reservations/ReservationEdit";
 import TableNew from "../tables/TableNew";
 import Search from "../search/Search";
 
@@ -23,6 +24,7 @@ function RootRoutes() {
       <Route path="/tables/new" element={<TableNew />} />
       <Route path="/reservations/new" element={<ReservationNew />} />
       <Route path="/reservations/:reservationId/seat" element={<ReservationSeat />} />
+      <Route path="/reservations/:reservationId/edit" element={<ReservationEdit />} />
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/search" element={<Search />} />
       <Route element={<NotFound />} />
