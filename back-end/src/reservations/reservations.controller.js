@@ -208,7 +208,8 @@ module.exports = {
     reservationDateIsValid,
     reservationTimeIsValid,
     asyncErrorBoundary(reservationExists),
-    reservationStatusIsNotFinished,
+    statusIs(["booked"]),
+    //reservationStatusIsNotFinished,
     asyncErrorBoundary(update),
   ],
   statusUpdate: [

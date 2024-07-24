@@ -211,3 +211,19 @@ export async function cancelReservation(reservation_id, signal){
     },
   );
 }
+
+/**
+ * Updates the information for a reservation
+ */
+export async function updateReservation(updatedReservation, signal){
+  const url = new URL(`${API_BASE_URL}/reservations/${updatedReservation.reservation_id}`);
+  const body = JSON.stringify({ data: updatedReservation });
+  return await fetchJson(url, 
+    {
+      body,
+      method: "PUT",
+      headers,
+      signal,
+    }
+  )
+}

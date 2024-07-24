@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { readReservation } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
+import ReservationForm from "./ReservationForm";
 
 function ReservationEdit(){
     const { reservationId } = useParams();
@@ -22,8 +23,9 @@ function ReservationEdit(){
     useEffect(loadReservation, [reservationId]);
 
     return (
-        <div>
+        <div className="col">
             <h1>Edit Reservation {reservation.reservation_id}</h1>
+            <ReservationForm defaultData={reservation} />
             <ErrorAlert error={reservationError} />
         </div>
     );

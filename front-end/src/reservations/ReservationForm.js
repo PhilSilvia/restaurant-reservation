@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { createReservation } from "../utils/api";
+import { createReservation, updateReservation } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import { checkForValidReservationData } from "../validation/validationChecks";
 
@@ -8,19 +8,21 @@ import { checkForValidReservationData } from "../validation/validationChecks";
  * Reservation form for submitting a new reservation to the restaurant system.
  * @returns React code for displaying the form
  */
-function ReservationForm(){
+function ReservationForm({ defaultData }){
     // State variables for tracking the ongoing form data
-    const [ formData, setFormData ] = useState({
-        first_name: "",
-        last_name: "",
-        mobile_number: "",
-        reservation_date: "",
-        reservation_time: "",
-        people: 0,
-    });
+    const [ formData, setFormData ] = useState(defaultData);
     // Tracks any errors from illegal form submissions
     const [ submissionError, setSubmissionError ] = useState(null);
+    const [ writeMode, setWriteMode ] = useState("create");
     const navigate = useNavigate();
+
+    // Update the state if the defaultData changes
+    useEffect(() => {
+        setFormData(defaultData);
+        if (defaultData && defaultData.reservation_id){
+            setWriteMode("update");
+        }
+    }, [defaultData]);
 
     // Event handler for when the form's values are changed, 
     // so we can track the change in our state variable
@@ -43,14 +45,25 @@ function ReservationForm(){
             setSubmissionError(null);
             // Ensures the 'people' value is a number
             const data = {...formData, "people": Number(formData.people)};
-            createReservation(data, abortController.signal)
-                .then(() => {
-                    const path = `/dashboard?date=${formData.reservation_date}`;
-                    return navigate(path);
-                })
-               .catch((error) => {
-                    setSubmissionError(error);
-               });
+            if (writeMode === "create"){
+                createReservation(data, abortController.signal)
+                    .then(() => {
+                        const path = `/dashboard?date=${formData.reservation_date}`;
+                        return navigate(path);
+                    })
+                   .catch((error) => {
+                        setSubmissionError(error);
+                    });
+            } else {
+                updateReservation(data, abortController.signal)
+                    .then(() => {
+                        const path = `/dashboard?date=${formData.reservation_date}`;
+                        return navigate(path);
+                    })
+                    .catch((error) => {
+                        setSubmissionError(error);
+                    });
+            }
         }
     };
 
