@@ -40,6 +40,8 @@ function timeIsValid(time, isToday = false) {
             const today = new Date();
             const hoursNow = Number(today.getHours());
             const minutesNow = Number(today.getMinutes());
+            
+            console.log(`Comparing ${hoursNow}:${minutesNow} to ${hour}:${minutes}`)
 
             // Check to ensure the time is in the future
             if (hour < hoursNow)
