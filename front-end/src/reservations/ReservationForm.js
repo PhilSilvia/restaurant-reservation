@@ -5,8 +5,8 @@ import ErrorAlert from "../layout/ErrorAlert";
 import { checkForValidReservationData } from "../validation/validationChecks";
 
 /**
- * Reservation form for submitting a new reservation to the restaurant system.
- * @returns React code for displaying the form
+ * Reservation form for submitting a new reservation or editing an existing one
+ * @returns JSX for the form
  */
 function ReservationForm({ defaultData }){
     // State variables for tracking the ongoing form data
@@ -24,8 +24,7 @@ function ReservationForm({ defaultData }){
         }
     }, [defaultData]);
 
-    // Event handler for when the form's values are changed, 
-    // so we can track the change in our state variable
+    // Event handler for when the form's values are changed, so we can track the change in our state variable
     const handleChange = ({ target }) => {
         const value = target.value;
         setFormData({ ...formData, [target.name]: value });
@@ -45,6 +44,7 @@ function ReservationForm({ defaultData }){
             setSubmissionError(null);
             // Ensures the 'people' value is a number
             const data = {...formData, "people": Number(formData.people)};
+            // API call for creating a new reservation, based on the current write mode
             if (writeMode === "create"){
                 createReservation(data, abortController.signal)
                     .then(() => {
@@ -54,7 +54,9 @@ function ReservationForm({ defaultData }){
                    .catch((error) => {
                         setSubmissionError(error);
                     });
-            } else {
+            }
+            // API call for updating an existing reservation 
+            else {
                 updateReservation(data, abortController.signal)
                     .then(() => {
                         const path = `/dashboard?date=${formData.reservation_date}`;

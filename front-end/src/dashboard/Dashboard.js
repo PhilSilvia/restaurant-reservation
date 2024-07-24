@@ -12,6 +12,7 @@ import TableList from "../tables/TableList";
  * @returns {JSX.Element}
  */
 function Dashboard() {
+  // State parameters to track our list of reservations, tables, and their associated errors
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
   const [tables, setTables] = useState([]);
@@ -22,33 +23,41 @@ function Dashboard() {
   const date = searchParams.get('date') || today();
   const navigate = useNavigate();
 
+  // Loads the dashboard based on the date from our query parameter, if any
   useEffect(loadDashboard, [date]);
 
+  // Loads the dashboard's reservations and tables
   function loadDashboard() {
     const abortController = new AbortController();
     setReservationsError(null);
     setTablesError(null);
+    // Grab the reservation list from the API, setting the error if we fail
     listReservations({ date }, abortController.signal)
       .then(setReservations)
       .catch(setReservationsError);
+    // Grab the tables list from the API, setting the error if we fail
     listTables({}, abortController.signal)
       .then(setTables)
       .catch(setTablesError);
     return () => abortController.abort();
   }
 
+  // Event handler for the "Previous" button
   const previousClickHandler = () => {
     navigate(`/dashboard?date=${previous(date)}`);
   }
 
+  // Event handler for the "Next" button
   const nextClickHandler = () => {
     navigate(`/dashboard?date=${next(date)}`);
   }
 
+  // Event handler for the "Today" button
   const todayClickHandler = () => {
     navigate("/dashboard");
   }
 
+  // Returns the JSX code for the page, which is two lists, the buttons for navigation between dates, and the Error alerts
   return (
     <main>
       <h1>Dashboard</h1>
@@ -78,5 +87,3 @@ function Dashboard() {
 }
 
 export default Dashboard;
-
-// {JSON.stringify(reservations)}

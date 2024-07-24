@@ -2,24 +2,36 @@ import React from "react";
 import { useNavigate } from "react-router";
 import { cancelReservation } from "../utils/api";
 
+/**
+ * Defines the detailed display for a Reservation.
+ * @param {Object} reservation The reservation whose details are being display
+ * @param {JSX.element} seatButton The button that allows the user to seat the reservation. Only used
+ * @returns JSX for the element
+ */
 function ReservationDetails({ reservation, seatButton = null }){
     const navigate = useNavigate();
 
+    // Event handler for the edit button, when it is present
     const editHandler = (event) => {
         event.preventDefault();
+        // Navigate to the edit page
         navigate(`/reservations/${reservation.reservation_id}/edit`);
     }
 
+    // Event handler for the cancel button, when it is present
     const cancelHandler = (event) => {
         event.preventDefault();
+        // Use a confirmation window to avoid accidents
         if (window.confirm("Do you want to cancel this reservation? This cannot be undone.")){
             const abortController = new AbortController();
+            // Attempts to set the status of the reservation to "cancelled", then reload the page
             cancelReservation(reservation.reservation_id, abortController.signal)
                 .then(() => window.location.reload())
                 .catch((error) => console.error(error));
         }
     }
 
+    // Returns the JSX for the display, using a Bootstrap card
     return (
         <div className="card my-2">
             <div className="card-header">

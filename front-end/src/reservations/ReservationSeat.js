@@ -5,11 +5,18 @@ import { readReservation } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import ReservationSeatingForm from "./ReservationSeatingForm";
 
+/**
+ * Defines the JSX for the page that allows a user to seat a particular reservation
+ * @returns JSX for the element
+ */
 function ReservationSeat(){
+    // State variables for storing the reservation and its errors
     const [reservation, setReservation] = useState({});
     const [reservationError, setReservationError] = useState(null);
+    // Grab the reservation id from the route parameters
     const { reservationId } = useParams();
 
+    // Function to load the required reservation on page load, or if the reservation id changes
     function loadReservation(){
         const abortController = new AbortController();
         setReservationError(null);
@@ -21,8 +28,10 @@ function ReservationSeat(){
         return () => abortController.abort();
     }
 
+    // Tells the program to load the reservation if the reservation id changes
     useEffect(loadReservation, [reservationId]);
 
+    // Returns the JSX for the element, which displays the details of the reservation and the seating form
     return (
         <div className="col">
             <div className="row">

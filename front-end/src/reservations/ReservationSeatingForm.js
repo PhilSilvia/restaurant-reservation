@@ -4,13 +4,20 @@ import { listTables, seatReservation } from '../utils/api';
 import ErrorAlert from '../layout/ErrorAlert';
 import { checkForValidTable } from '../validation/validationChecks';
 
+/**
+ * Defines the JSX for the form that allows a user to seat a particular reservation
+ * @param {Object} reservation The reservation being seated 
+ * @returns JSX for the element
+ */
 function ReservationSeatingForm({ reservation }){
+    // State variables for tracking the table that's been selected, the tables to be displayed as options, and any errors
     const [ selectedTable, setSelectedTable ] = useState('');
     const [ tables, setTables ] = useState([]);
     const [ submissionError, setSubmissionError ] = useState(null);
     const [ tablesError, setTablesError ] = useState(null);
     const navigate = useNavigate();
 
+    // Function for loading the tables on page load
     function loadTables(){
         const abortController = new AbortController();
         setTablesError(null);
@@ -20,6 +27,7 @@ function ReservationSeatingForm({ reservation }){
         return () => abortController.abort();
     }
 
+    // Tells the program to load the tables on page load
     useEffect(loadTables, []);
 
     // Event handler for when the form's values are changed, 
@@ -48,11 +56,13 @@ function ReservationSeatingForm({ reservation }){
         }
     }
 
+    // Handler for when the cancel button is clicked
     function handleCancel(event){
         event.preventDefault();
         navigate("/");
     }
 
+    // Returns the JSX for the form
     return (
         <div className="col">
             <form onSubmit={handleSubmission}>

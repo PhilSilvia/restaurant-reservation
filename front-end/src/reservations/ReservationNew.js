@@ -1,7 +1,12 @@
 import React from "react";
 import ReservationForm from "./ReservationForm";
 
+/**
+ * Defines the JSX of the page for creating a new Reservation
+ * @returns JSX for the element
+ */
 function ReservationNew(){
+    // Empty form data to be passed onto the form
     const emptyForm = {
         first_name: "",
         last_name: "",
@@ -11,6 +16,7 @@ function ReservationNew(){
         people: 0,
     };
 
+    // The JSX for the element, which is mostly a div to hold the form
     return (
         <main>
             <h1>Make a New Reservation</h1>

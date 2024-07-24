@@ -17,6 +17,7 @@ import Search from "../search/Search";
  * @returns {JSX.Element}
  */
 function RootRoutes() {
+  // Route definitions for each path on the application
   return (
     <Routes>
       <Route exact={true} path="/" element={<Navigate to={"/dashboard"} />} />
@@ -33,5 +34,3 @@ function RootRoutes() {
 }
 
 export default RootRoutes;
-
-//<Route exact={true} path="*" element={<Navigate to={"/dashboard"} />} />
