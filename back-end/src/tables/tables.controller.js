@@ -141,7 +141,7 @@ const { table } = res.locals;
  * Helper function to ensure that the indicated reservation actually exists
  */
 async function reservationExists(req, res, next){
-  const { reservation_id } = req.body.data;
+  const reservation_id = res.locals.table.reservation_id ? res.locals.table.reservation_id : req.body.data.reservation_id;
   const reservation = await reservationService.read(reservation_id);
   if (reservation && reservation.length > 0){
     res.locals.reservation = reservation[0];
@@ -251,8 +251,8 @@ module.exports = {
     ],
     clear: [
       asyncErrorBoundary(tableExists),
-      asyncErrorBoundary(reservationExists),
       tableOccupied,
+      asyncErrorBoundary(reservationExists),
       asyncErrorBoundary(clear),
     ],
 };
